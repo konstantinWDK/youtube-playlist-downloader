@@ -1,7 +1,7 @@
 services:
-  youtube-downloader:
+  youtube-playlist-downloader:
     build: .
-    container_name: youtube-downloader
+    container_name: youtube-playlist-downloader
     restart: unless-stopped
     ports:
       - "5006:5006"

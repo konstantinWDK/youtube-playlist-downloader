@@ -112,7 +112,7 @@ def index():
 def health():
     return jsonify({
         'status': 'healthy',
-        'service': 'youtube-downloader',
+        'service': 'youtube-playlist-downloader',
         'active_jobs': len(jobs)
     }), 200
 

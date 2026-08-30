@@ -27,7 +27,7 @@ Esta aplicación está 100% optimizada para desplegarse en **Coolify** conectado
 ### Paso 2: Crear la Aplicación en Coolify
 1. En tu panel de Coolify, ve a tu **Project / Environment**.
 2. Haz clic en **+ New Resource** -> **Application** -> **Public/Private GitHub Repository**.
-3. Selecciona tu repositorio `youtube-downloader` y la rama (`main` o `master`).
+3. Selecciona tu repositorio `youtube-playlist-downloader` y la rama (`main` o `master`).
 4. Selecciona **Dockerfile** como tipo de construcción (Build Pack).
 
 ### Paso 3: Configurar Dominio y Puerto
@@ -47,8 +47,8 @@ Si prefieres ejecutarlo directamente con Docker Compose en tu servidor:
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/tu-usuario/youtube-downloader.git
-cd youtube-downloader
+git clone https://github.com/tu-usuario/youtube-playlist-downloader.git
+cd youtube-playlist-downloader
 
 # 2. Levantar el contenedor
 docker compose up -d --build
