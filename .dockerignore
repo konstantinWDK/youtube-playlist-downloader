@@ -1,0 +1,14 @@
+venv/
+.env
+.git
+.gitignore
+.dockerignore
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+downloads/*
+!downloads/.gitkeep
+package-lock.json
+README.md
