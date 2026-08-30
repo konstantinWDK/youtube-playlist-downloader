@@ -9,25 +9,39 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.pytest_cache/
+.mypy_cache/
 
-# Environment Variables
+# Environment Variables & Secrets
 .env
-.env.local
+.env.*
+!.env.example
 
-# Downloads
+# Downloads & Media Cache
 downloads/*
 !downloads/.gitkeep
+*.mp3
+*.mp4
+*.webm
+*.m4a
+*.opus
+*.part
+*.ytdl
 
 # Operating System
 .DS_Store
 Thumbs.db
+*.tmp
 
-# IDEs
+# IDEs & Editors
 .idea/
 .vscode/
 *.swp
 *.swo
+*.sublime-workspace
+*.sublime-project
 
-# Temporary files
-package-lock.json
+# Logs and runtime files
 *.log
+package-lock.json
+

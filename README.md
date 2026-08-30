@@ -2,7 +2,7 @@
 
 Una aplicación web moderna, rápida y ligera construida con **Flask**, **yt-dlp** y **FFmpeg** para descargar y convertir videos y listas de reproducción de YouTube a audio **MP3 (192 kbps)** de alta calidad.
 
-Diseñada y preparada para desplegarse fácilmente en **Coolify** o cualquier servidor con Docker.
+Diseñada tanto para uso personal local como para despliegues en servidores domésticos, VPS o plataformas PaaS como **Coolify**.
 
 ---
 
@@ -10,120 +10,145 @@ Diseñada y preparada para desplegarse fácilmente en **Coolify** o cualquier se
 
 - 🎧 **Conversión de Alta Calidad**: Extracción directa de audio a formato MP3 a 192 kbps utilizando FFmpeg.
 - 📋 **Soporte para Listas de Reproducción y Lotes**: Descarga múltiples videos individuales o listas completas con solo pegar las URLs.
-- ⚡ **Procesamiento Asíncrono**: Cola de descargas en segundo plano sin bloquear la interfaz de usuario.
-- 🧹 **Limpieza Automática**: Rutina periódica en segundo plano que elimina archivos descargados antiguos (por defecto tras 2 horas) para no saturar el almacenamiento del servidor.
-- 🛡️ **Preparado para Producción**: Servido con **Gunicorn**, soporte para proxy inverso (`ProxyFix`) y endpoint `/health` para monitorización.
-- 📱 **Interfaz Moderna y Responsiva**: Diseño pulido con soporte móvil, animaciones sutiles y seguimiento en tiempo real.
+- ⚡ **Procesamiento Asíncrono**: Cola de descargas en segundo plano sin bloquear la interfaz ni la navegación.
+- 🧹 **Limpieza Automática**: Rutina periódica en segundo plano que elimina archivos descargados antiguos (por defecto tras 2 horas) para proteger el almacenamiento del servidor.
+- 🛡️ **Seguro y Preparado para Producción**: Servido con **Gunicorn**, protección contra Path Traversal, soporte para proxy inverso (`ProxyFix`) y endpoint `/health`.
+- 📱 **Interfaz Moderna y Responsiva**: Diseño pulido con soporte móvil, animaciones sutiles y seguimiento de progreso en tiempo real.
 
 ---
 
-## 🚀 Despliegue en Coolify
+## ⚡ Inicio Rápido (30 segundos con Docker)
 
-Esta aplicación está 100% optimizada para desplegarse en **Coolify** conectado a tu repositorio de GitHub:
-
-### Paso 1: Subir a GitHub
-1. Inicializa tu repositorio Git y súbelo a tu cuenta de GitHub (ver sección [Subir a GitHub](#-subir-a-github)).
-
-### Paso 2: Crear la Aplicación en Coolify
-1. En tu panel de Coolify, ve a tu **Project / Environment**.
-2. Haz clic en **+ New Resource** -> **Application** -> **Public/Private GitHub Repository**.
-3. Selecciona tu repositorio `youtube-playlist-downloader` y la rama (`main` o `master`).
-4. Selecciona **Dockerfile** como tipo de construcción (Build Pack).
-
-### Paso 3: Configurar Dominio y Puerto
-1. En la configuración de la aplicación:
-   - **Domains**: Asigna tu subdominio (ej: `https://yt.tudominio.com`).
-   - **Port**: `5006` (o déjalo en el puerto por defecto expuesto).
-   - **Health Check Path**: `/health`
-
-### Paso 4: Desplegar
-1. Haz clic en **Deploy**. Coolify construirá la imagen Docker, configurará el certificado SSL automático mediante Let's Encrypt y enrutará el tráfico a través de su proxy inverso.
-
----
-
-## 🐳 Despliegue con Docker Compose (Servidor Propio)
-
-Si prefieres ejecutarlo directamente con Docker Compose en tu servidor:
+La forma más rápida y recomendada de ejecutar la aplicación:
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/tu-usuario/youtube-playlist-downloader.git
+git clone https://github.com/<TU-USUARIO>/youtube-playlist-downloader.git
 cd youtube-playlist-downloader
 
 # 2. Levantar el contenedor
 docker compose up -d --build
 ```
 
-La aplicación estará disponible en `http://localhost:5006` o en la IP de tu servidor.
+Abre tu navegador en 👉 **`http://localhost:5006`**
 
 ---
 
-## 💻 Ejecución Local (Desarrollo)
+## 🚀 Opciones de Instalación
 
-### Requisitos previos
-- Python 3.10+
-- FFmpeg instalado en el sistema (`sudo apt install ffmpeg` en Ubuntu/Debian o `brew install ffmpeg` en macOS)
+Elige el método que mejor se adapte a tus necesidades:
 
-### Pasos
+### Opción 1: Despliegue en Coolify (Recomendado para servidores)
+
+Esta aplicación está 100% preparada para **Coolify**:
+
+1. **Crear recurso en Coolify**:
+   - Ve a tu proyecto en Coolify.
+   - Selecciona **+ New Resource** ➔ **Application** ➔ **Public/Private GitHub Repository**.
+   - Selecciona tu repositorio y la rama (`main`).
+2. **Configuración de compilación**:
+   - **Build Pack**: `Dockerfile`
+   - **Port**: `5006`
+   - **Health Check Path**: `/health`
+3. **Dominio**:
+   - Asigna tu dominio o subdominio (ej: `https://yt.tudominio.com`).
+4. **Desplegar**:
+   - Haz clic en **Deploy**. Coolify configurará SSL automático (Let's Encrypt) y enrutará el tráfico a través de su reverse proxy.
+
+---
+
+### Opción 2: Instalación Local con Python (Sin Docker)
+
+#### Requisitos Previos:
+- **Python 3.10 o superior**
+- **FFmpeg** instalado en tu sistema:
+  - **Ubuntu / Debian**: `sudo apt update && sudo apt install ffmpeg -y`
+  - **macOS**: `brew install ffmpeg`
+  - **Windows**: Descargar desde [gyan.dev/ffmpeg](https://www.gyan.dev/ffmpeg/builds/) o con `winget install Gyan.FFmpeg` y verificar que esté en el `PATH`.
+
+#### Pasos de Instalación:
+
 ```bash
-# 1. Crear y activar entorno virtual
-python3 -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
+# 1. Clonar el repositorio
+git clone https://github.com/<TU-USUARIO>/youtube-playlist-downloader.git
+cd youtube-playlist-downloader
 
-# 2. Instalar dependencias
+# 2. Crear y activar entorno virtual
+python3 -m venv venv
+
+# En Linux / macOS:
+source venv/bin/activate
+
+# En Windows (CMD / PowerShell):
+venv\Scripts\activate
+
+# 3. Instalar dependencias
 pip install -r requirements.txt
 
-# 3. Iniciar el servidor
+# 4. Iniciar la aplicación
 python app.py
 ```
 
-Accede a `http://localhost:5006` en tu navegador.
+Accede a **`http://localhost:5006`** en tu navegador.
 
 ---
 
-## ⚙️ Variables de Entorno
+## ⚙️ Configuración y Variables de Entorno
+
+Puedes personalizar la configuración creando un archivo `.env` a partir del ejemplo:
+
+```bash
+cp .env.example .env
+```
 
 | Variable | Descripción | Valor por defecto |
 | :--- | :--- | :--- |
 | `PORT` | Puerto en el que escucha el servidor web | `5006` |
 | `DOWNLOAD_FOLDER` | Directorio donde se almacenan temporalmente los archivos | `downloads` |
-| `FILE_EXPIRY_SECONDS` | Tiempo en segundos antes de eliminar archivos antiguos | `7200` (2 horas) |
+| `FILE_EXPIRY_SECONDS` | Tiempo en segundos antes de eliminar archivos descargados | `7200` (2 horas) |
 
 ---
 
-## 📦 Subir a GitHub
+## 🛠️ Solución de Problemas Frecuentes
 
-Para subir este proyecto a un nuevo repositorio en GitHub:
+<details>
+<summary><b>1. YouTube ha cambiado su algoritmo y las descargas fallan</b></summary>
 
-```bash
-# Inicializar repositorio git
-git init -b main
+YouTube actualiza sus medidas frecuentemente. Para solucionarlo, simplemente actualiza `yt-dlp` a la última versión:
 
-# Añadir todos los archivos
-git add .
+- **En Docker**: Reconstruye la imagen ejecutando `docker compose up -d --build --no-cache`
+- **En Python Local**: Ejecuta `pip install --upgrade yt-dlp`
+</details>
 
-# Crear el primer commit
-git commit -m "feat: initial commit - ready for coolify deployment"
+<details>
+<summary><b>2. Error: "FFmpeg not found"</b></summary>
 
-# Vincular con tu repositorio remoto de GitHub
-git remote add origin https://github.com/<TU_USUARIO>/<TU_REPOSITORIO>.git
-
-# Subir cambios
-git push -u origin main
-```
+Asegúrate de haber instalado FFmpeg en tu sistema operativo y que el comando `ffmpeg -version` responda correctamente en tu terminal antes de iniciar la app sin Docker.
+</details>
 
 ---
 
 ## 📡 API Endpoints
 
-- `GET /` : Interfaz web principal.
-- `GET /health` : Verificación de estado del servicio para Docker/Coolify.
-- `POST /download` : Inicia la descarga de una lista de URLs en formato JSON (`{"urls": ["https://..."]}`).
-- `GET /status/<job_id>` : Consulta el estado actual de una tarea (`queued`, `processing`, `completed`, `failed`).
-- `GET /files/<filename>` : Descarga directa del archivo MP3 generado.
+| Método | Endpoint | Descripción |
+| :--- | :--- | :--- |
+| `GET` | `/` | Interfaz web interactiva |
+| `GET` | `/health` | Chequeo de salud del servicio (retorna status HTTP 200) |
+| `POST` | `/download` | Inicia la descarga en lote (`{"urls": ["https://..."]}`) |
+| `GET` | `/status/<job_id>` | Consulta el estado de una tarea (`queued`, `processing`, `completed`, `failed`) |
+| `GET` | `/files/<filename>` | Descarga segura del archivo MP3 generado |
+
+---
+
+## 🔒 Seguridad y Privacidad
+
+- **Sin almacenamiento permanente**: Los audios descargados se eliminan automáticamente tras el período configurado (`FILE_EXPIRY_SECONDS`).
+- **Seguridad en descargas**: Validación estricta con `os.path.basename` y `send_from_directory` para prevenir ataques de Path Traversal.
+- **Sin credenciales requeridas**: No almacena cookies, inicios de sesión ni datos privados de usuarios.
 
 ---
 
 ## ⚖️ Licencia y Aviso Legal
 
-Este proyecto se proporciona únicamente con fines educativos y de uso personal. Asegúrate de cumplir con los términos de servicio de YouTube y las leyes de derechos de autor aplicables en tu jurisdicción.
+Este proyecto se distribuye bajo la licencia MIT con fines educativos y de uso personal. Asegúrate de cumplir con los términos de servicio de YouTube y las leyes de derechos de autor aplicables en tu jurisdicción.
+
