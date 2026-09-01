@@ -2,9 +2,25 @@ import os
 import time
 import threading
 import uuid
-from flask import Flask, request, render_template, send_from_directory, jsonify
+import io
+import logging
+from logging.handlers import TimedRotatingFileHandler
+from flask import Flask, request, render_template, send_from_directory, jsonify, send_file
 from werkzeug.middleware.proxy_fix import ProxyFix
 import yt_dlp
+
+# --- LOGGING SETUP ---
+LOG_DIR = os.path.abspath('logs')
+os.makedirs(LOG_DIR, exist_ok=True)
+log_file = os.path.join(LOG_DIR, 'downloads.log')
+handler = TimedRotatingFileHandler(log_file, when="midnight", interval=1, backupCount=30)
+handler.suffix = "%Y-%m-%d"
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger = logging.getLogger("yt-downloader")
+logger.setLevel(logging.INFO)
+logger.addHandler(handler)
+# ---------------------
 
 app = Flask(__name__)
 
@@ -117,57 +133,69 @@ def health():
     }), 200
 
 
-@app.route('/download', methods=['POST'])
-def start_download():
+@app.route('/info', methods=['POST'])
+def get_info():
     payload = request.get_json(silent=True) or {}
-    urls = payload.get('urls', [])
-    if not urls or not isinstance(urls, list):
-        return jsonify({'error': 'No se han proporcionado URLs válidas.'}), 400
+    url = payload.get('url')
+    if not url:
+        return jsonify({'error': 'No se proporcionó una URL.'}), 400
 
-    all_urls = []
+    logger.info(f"User requested info for URL: {url}")
+    
+    all_videos = []
     ydl_opts = {'extract_flat': True, 'quiet': True, 'no_warnings': True}
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        for url in urls:
-            url = str(url).strip()
-            if not url:
-                continue
-            try:
-                info = ydl.extract_info(url, download=False)
-                if info and 'entries' in info and info['entries']:
-                    # Playlist
-                    for entry in info['entries']:
-                        if entry:
-                            v_url = entry.get('url') or f"https://www.youtube.com/watch?v={entry.get('id')}"
-                            v_title = entry.get('title') or "Video en lista"
-                            all_urls.append({'url': v_url, 'title': v_title})
-                else:
-                    v_title = (info.get('title') if info else None) or "Cargando audio..."
-                    all_urls.append({'url': url, 'title': v_title})
-            except Exception as e:
-                print(f"Error extrayendo info para {url}: {e}")
-                all_urls.append({'url': url, 'title': url})
+        try:
+            info = ydl.extract_info(url, download=False)
+            if info and 'entries' in info and info['entries']:
+                # It's a playlist
+                for entry in info['entries']:
+                    if entry:
+                        v_url = entry.get('url') or f"https://www.youtube.com/watch?v={entry.get('id')}"
+                        v_title = entry.get('title') or "Video en lista"
+                        all_videos.append({'url': v_url, 'title': v_title})
+            else:
+                # Single video
+                v_title = (info.get('title') if info else None) or "Audio a descargar"
+                v_url = info.get('webpage_url') or url
+                all_videos.append({'url': v_url, 'title': v_title})
+        except Exception as e:
+            logger.error(f"Error extracting info for {url}: {e}")
+            return jsonify({'error': 'No se pudo analizar la URL.'}), 500
 
-    if not all_urls:
+    if not all_videos:
         return jsonify({'error': 'No se encontraron videos procesables.'}), 400
+
+    return jsonify({'videos': all_videos})
+
+
+@app.route('/download', methods=['POST'])
+def start_download():
+    payload = request.get_json(silent=True) or {}
+    videos = payload.get('videos', [])
+    if not videos or not isinstance(videos, list):
+        return jsonify({'error': 'No se han proporcionado videos válidos.'}), 400
+
+    logger.info(f"User started download for {len(videos)} videos")
 
     job_ids = []
     urls_to_download = []
     now = time.time()
 
     with jobs_lock:
-        for item in all_urls:
+        for item in videos:
             job_id = str(uuid.uuid4())
             jobs[job_id] = {
                 'status': 'queued',
-                'url': item['url'],
-                'title': item['title'],
+                'url': item.get('url'),
+                'title': item.get('title', 'Unknown Title'),
                 'created_at': now,
                 'filename': None,
                 'error': None
             }
             job_ids.append(job_id)
-            urls_to_download.append(item['url'])
+            urls_to_download.append(item.get('url'))
 
     thread = threading.Thread(target=process_batch, args=(urls_to_download, job_ids), daemon=True)
     thread.start()
@@ -187,11 +215,30 @@ def get_status(job_id):
 @app.route('/files/<path:filename>')
 def download_file(filename):
     safe_filename = os.path.basename(filename)
-    return send_from_directory(
-        app.config['DOWNLOAD_FOLDER'],
-        safe_filename,
-        as_attachment=True
-    )
+    filepath = os.path.join(app.config['DOWNLOAD_FOLDER'], safe_filename)
+    
+    if not os.path.exists(filepath):
+        return jsonify({'error': 'Archivo no encontrado'}), 404
+        
+    try:
+        # Leer el archivo a la memoria (RAM)
+        with open(filepath, 'rb') as f:
+            file_data = f.read()
+            
+        # Borrar el archivo físico del disco inmediatamente
+        os.remove(filepath)
+        logger.info(f"File {safe_filename} downloaded and deleted from disk.")
+        
+        # Enviar el archivo al usuario desde la memoria
+        return send_file(
+            io.BytesIO(file_data),
+            as_attachment=True,
+            download_name=safe_filename,
+            mimetype='audio/mpeg'
+        )
+    except Exception as e:
+        logger.error(f"Error serving file {safe_filename}: {e}")
+        return jsonify({'error': 'Error al procesar la descarga'}), 500
 
 
 if __name__ == '__main__':

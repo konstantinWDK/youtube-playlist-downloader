@@ -9,17 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-            --glass-bg: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --bg-color: #0f172a;
-            --card-bg: rgba(15, 23, 42, 0.6);
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
             --success: #10b981;
-            --warning: #f59e0b;
             --danger: #ef4444;
         }
 
@@ -30,225 +27,217 @@
         }
 
         body {
-            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Outfit', sans-serif;
             background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.15) 0px, transparent 50%);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 24px;
+            align-items: flex-start;
+            padding: 40px 24px;
         }
 
         .container {
             width: 100%;
-            max-width: 680px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
+            max-width: 700px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
             padding: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 28px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-radius: 20px;
-            background: rgba(99, 102, 241, 0.2);
-            color: #a5b4fc;
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            margin-bottom: 12px;
+            margin-bottom: 32px;
         }
 
         h1 {
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 700;
+            color: var(--text-main);
             margin-bottom: 8px;
-            background: var(--primary-gradient);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
         }
 
         p.subtitle {
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 300;
-            line-height: 1.5;
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         label {
             display: block;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 500;
-            color: var(--text-muted);
+            color: var(--text-main);
             margin-bottom: 8px;
         }
 
-        textarea {
+        input[type="text"] {
             width: 100%;
-            height: 140px;
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid var(--glass-border);
-            border-radius: 14px;
-            padding: 16px;
-            color: var(--text-main);
-            font-family: inherit;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            resize: vertical;
-            transition: all 0.25s ease;
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
-        }
-
-        textarea::placeholder {
-            color: rgba(148, 163, 184, 0.5);
-        }
-
-        .actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        button {
-            flex: 1;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 12px;
-            background: var(--primary-gradient);
-            color: #ffffff;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
             font-family: inherit;
             font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
-            display: flex;
+            color: var(--text-main);
+            background: #f1f5f9;
+            transition: all 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
         }
 
-        button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 16px 20px -3px rgba(99, 102, 241, 0.4);
+        .btn-primary {
+            background: var(--primary);
+            color: white;
         }
 
-        button:disabled {
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #e2e8f0;
+        }
+
+        .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
         }
 
-        button.btn-secondary {
-            flex: 0 0 auto;
-            background: rgba(255, 255, 255, 0.06);
-            color: var(--text-muted);
-            border: 1px solid var(--glass-border);
-            box-shadow: none;
-            font-size: 0.9rem;
+        /* Playlist Selection Styles */
+        #selection-section {
+            display: none;
+            margin-top: 24px;
+            border-top: 1px solid var(--border);
+            padding-top: 24px;
         }
 
-        button.btn-secondary:hover:not(:disabled) {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-main);
-            box-shadow: none;
-        }
-
-        .status-header {
+        .selection-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 32px;
             margin-bottom: 16px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--glass-border);
         }
 
-        .status-header h2 {
+        .selection-header h3 {
             font-size: 1.1rem;
             font-weight: 600;
         }
 
-        #status-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+        .video-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            background: #fafafa;
         }
 
-        .status-item {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 14px;
-            padding: 16px 18px;
+        .video-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            gap: 16px;
-            animation: slideIn 0.3s ease-out;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s;
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+        .video-item:last-child {
+            border-bottom: none;
         }
 
-        .item-info {
+        .video-item:hover {
+            background: #f1f5f9;
+        }
+
+        .video-item input[type="checkbox"] {
+            margin-right: 16px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .video-info {
             flex: 1;
-            min-width: 0;
+            overflow: hidden;
         }
 
-        .item-title {
-            font-weight: 500;
+        .video-title {
             font-size: 0.95rem;
+            font-weight: 500;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            margin-bottom: 4px;
+            cursor: pointer;
         }
 
-        .item-url {
-            font-size: 0.75rem;
+        .video-url {
+            font-size: 0.8rem;
             color: var(--text-muted);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .item-actions {
+        /* Status Section Styles */
+        #status-section {
+            display: none;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .status-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .status-item {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
-            flex-shrink: 0;
+            gap: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
         .status-badge {
@@ -257,173 +246,268 @@
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.03em;
         }
 
-        .status-badge.queued { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; }
-        .status-badge.processing { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
-        .status-badge.completed { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
-        .status-badge.failed { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+        .status-badge.queued { background: #f1f5f9; color: var(--text-muted); }
+        .status-badge.processing { background: #eff6ff; color: #3b82f6; }
+        .status-badge.completed { background: #ecfdf5; color: var(--success); }
+        .status-badge.failed { background: #fef2f2; color: var(--danger); }
 
         .btn-download {
-            background: #10b981;
+            background: var(--success);
             color: white;
             text-decoration: none;
-            padding: 6px 14px;
-            border-radius: 8px;
+            padding: 6px 12px;
+            border-radius: 6px;
             font-size: 0.85rem;
-            font-weight: 600;
-            transition: background 0.2s ease, transform 0.1s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            font-weight: 500;
+            transition: background 0.2s;
         }
 
         .btn-download:hover {
             background: #059669;
-            transform: translateY(-1px);
         }
 
         .spinner {
-            width: 14px;
-            height: 14px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-top-color: currentColor;
             border-radius: 50%;
-            border-top-color: white;
             animation: spin 0.8s linear infinite;
-            display: inline-block;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        .footer {
-            margin-top: 32px;
-            text-align: center;
-            font-size: 0.8rem;
-            color: var(--text-muted);
+        .flex-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <span class="badge">Audio Extractor (192 kbps MP3)</span>
-            <h1>YouTube MP3 Downloader</h1>
-            <p class="subtitle">Pega una o varias URLs de videos o listas de reproducción (una por línea) para extraer y descargar el audio.</p>
+            <h1>Playlist Downloader</h1>
+            <p class="subtitle">Descarga audio de YouTube en un diseño simple y minimalista</p>
         </div>
 
         <div class="input-group">
-            <label for="urls-input">URLs de YouTube:</label>
-            <textarea id="urls-input" placeholder="https://www.youtube.com/watch?v=...&#10;https://youtu.be/...&#10;https://www.youtube.com/playlist?list=..."></textarea>
-        </div>
-
-        <div class="actions">
-            <button id="download-btn">
-                <span>Comenzar Descarga</span>
+            <label for="url-input">Enlace del video o lista de reproducción:</label>
+            <div class="flex-row">
+                <input type="text" id="url-input" placeholder="https://www.youtube.com/watch?v=...">
+            </div>
+            <button class="btn btn-primary" id="analyze-btn">
+                <span>Analizar URL</span>
             </button>
-            <button id="clear-btn" class="btn-secondary" title="Limpiar lista y texto">Limpiar</button>
         </div>
 
-        <div id="status-section" style="display: none;">
+        <!-- Section 2: Selection -->
+        <div id="selection-section">
+            <div class="selection-header">
+                <h3>Selecciona las canciones</h3>
+                <div>
+                    <input type="checkbox" id="select-all" checked>
+                    <label for="select-all" style="display:inline; margin-left:4px; cursor:pointer;">Seleccionar todo</label>
+                </div>
+            </div>
+            
+            <div class="video-list" id="video-list">
+                <!-- Video items will be injected here -->
+            </div>
+
+            <div class="flex-row" style="margin-bottom: 0;">
+                <button class="btn btn-secondary" id="cancel-btn">Cancelar</button>
+                <button class="btn btn-primary" id="start-download-btn">Descargar Seleccionadas</button>
+            </div>
+        </div>
+
+        <!-- Section 3: Status Tracking -->
+        <div id="status-section">
             <div class="status-header">
-                <h2>Cola de Descargas</h2>
-                <span id="queue-counter" style="font-size: 0.85rem; color: var(--text-muted);">0 elementos</span>
+                <h3>Descargas en progreso</h3>
             </div>
             <div id="status-list"></div>
-        </div>
-
-        <div class="footer">
-            Conversión de alta calidad mediante FFmpeg & yt-dlp
         </div>
     </div>
 
     <script>
-        const downloadBtn = document.getElementById('download-btn');
-        const clearBtn = document.getElementById('clear-btn');
-        const urlsInput = document.getElementById('urls-input');
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const urlInput = document.getElementById('url-input');
+        
+        const selectionSection = document.getElementById('selection-section');
+        const videoListEl = document.getElementById('video-list');
+        const selectAllCheckbox = document.getElementById('select-all');
+        const startDownloadBtn = document.getElementById('start-download-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+
         const statusSection = document.getElementById('status-section');
-        const statusList = document.getElementById('status-list');
-        const queueCounter = document.getElementById('queue-counter');
+        const statusListEl = document.getElementById('status-list');
 
-        let activeJobCount = 0;
+        let loadedVideos = [];
 
-        downloadBtn.addEventListener('click', async () => {
-            const urls = urlsInput.value.split('\n').map(u => u.trim()).filter(u => u !== '');
-            if (urls.length === 0) {
-                alert('Por favor, introduce al menos una URL válida.');
+        // 1. Analyze URL
+        analyzeBtn.addEventListener('click', async () => {
+            const url = urlInput.value.trim();
+            if (!url) {
+                alert("Introduce una URL válida");
                 return;
             }
 
-            downloadBtn.disabled = true;
-            downloadBtn.innerHTML = '<span class="spinner"></span> Analizando enlaces...';
+            analyzeBtn.disabled = true;
+            analyzeBtn.innerHTML = '<div class="spinner"></div> <span>Analizando...</span>';
+            selectionSection.style.display = 'none';
+
+            try {
+                const response = await fetch('/info', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.error || 'Error al analizar la URL');
+                }
+
+                const data = await response.json();
+                loadedVideos = data.videos;
+                renderVideoList(loadedVideos);
+                selectionSection.style.display = 'block';
+
+            } catch (err) {
+                alert(err.message);
+            } finally {
+                analyzeBtn.disabled = false;
+                analyzeBtn.innerHTML = '<span>Analizar URL</span>';
+            }
+        });
+
+        function renderVideoList(videos) {
+            videoListEl.innerHTML = '';
+            selectAllCheckbox.checked = true;
+
+            videos.forEach((video, index) => {
+                const item = document.createElement('div');
+                item.className = 'video-item';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'video-checkbox';
+                checkbox.checked = true;
+                checkbox.dataset.index = index;
+
+                const info = document.createElement('div');
+                info.className = 'video-info';
+                
+                const title = document.createElement('div');
+                title.className = 'video-title';
+                title.innerText = video.title;
+                title.addEventListener('click', () => { checkbox.checked = !checkbox.checked; updateSelectAll(); });
+
+                const url = document.createElement('div');
+                url.className = 'video-url';
+                url.innerText = video.url;
+
+                info.appendChild(title);
+                info.appendChild(url);
+                
+                item.appendChild(checkbox);
+                item.appendChild(info);
+                
+                videoListEl.appendChild(item);
+
+                checkbox.addEventListener('change', updateSelectAll);
+            });
+        }
+
+        function updateSelectAll() {
+            const checkboxes = document.querySelectorAll('.video-checkbox');
+            const allChecked = Array.from(checkboxes).every(c => c.checked);
+            selectAllCheckbox.checked = allChecked;
+        }
+
+        selectAllCheckbox.addEventListener('change', (e) => {
+            const checkboxes = document.querySelectorAll('.video-checkbox');
+            checkboxes.forEach(c => c.checked = e.target.checked);
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            selectionSection.style.display = 'none';
+            loadedVideos = [];
+        });
+
+        // 2. Start Download
+        startDownloadBtn.addEventListener('click', async () => {
+            const checkboxes = document.querySelectorAll('.video-checkbox:checked');
+            if (checkboxes.length === 0) {
+                alert('Selecciona al menos una canción.');
+                return;
+            }
+
+            const selectedVideos = Array.from(checkboxes).map(c => loadedVideos[c.dataset.index]);
+
+            startDownloadBtn.disabled = true;
+            startDownloadBtn.innerHTML = '<div class="spinner"></div> <span>Iniciando...</span>';
 
             try {
                 const response = await fetch('/download', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ urls })
+                    body: JSON.stringify({ videos: selectedVideos })
                 });
 
                 if (!response.ok) {
-                    const errData = await response.json();
-                    throw new Error(errData.error || 'Error al iniciar descarga.');
+                    const data = await response.json();
+                    throw new Error(data.error || 'Error al iniciar descarga');
                 }
 
                 const { job_ids } = await response.json();
+                
+                // Hide selection, show status
+                selectionSection.style.display = 'none';
                 statusSection.style.display = 'block';
-                urlsInput.value = '';
+                urlInput.value = '';
 
                 job_ids.forEach(id => {
                     createStatusItem(id);
                     trackJob(id);
                 });
-                updateCounter();
-            } catch (error) {
-                alert(error.message || 'Error de conexión con el servidor.');
+
+            } catch (err) {
+                alert(err.message);
             } finally {
-                downloadBtn.disabled = false;
-                downloadBtn.innerHTML = '<span>Comenzar Descarga</span>';
+                startDownloadBtn.disabled = false;
+                startDownloadBtn.innerText = 'Descargar Seleccionadas';
             }
         });
 
-        clearBtn.addEventListener('click', () => {
-            urlsInput.value = '';
-            statusList.innerHTML = '';
-            statusSection.style.display = 'none';
-            activeJobCount = 0;
-            updateCounter();
-        });
-
-        function updateCounter() {
-            const count = statusList.children.length;
-            queueCounter.innerText = `${count} ${count === 1 ? 'elemento' : 'elementos'}`;
-        }
-
+        // 3. Track Status
         function createStatusItem(id) {
             const item = document.createElement('div');
             item.className = 'status-item';
             item.id = `job-${id}`;
             item.innerHTML = `
-                <div class="item-info">
-                    <div class="item-title">Analizando video...</div>
-                    <div class="item-url">ID: ${id.substring(0, 8)}...</div>
+                <div class="video-info">
+                    <div class="video-title">Procesando...</div>
+                    <div class="video-url">ID: ${id.substring(0, 8)}...</div>
                 </div>
-                <div class="item-actions">
+                <div>
                     <span class="status-badge queued">En cola</span>
                 </div>
             `;
-            statusList.prepend(item);
+            statusListEl.prepend(item);
         }
 
         async function trackJob(id) {
             const item = document.getElementById(`job-${id}`);
             if (!item) return;
 
-            const titleEl = item.querySelector('.item-title');
-            const actionsEl = item.querySelector('.item-actions');
-            const urlEl = item.querySelector('.item-url');
+            const titleEl = item.querySelector('.video-title');
+            const actionsContainer = item.lastElementChild;
 
             const checkStatus = async () => {
                 try {
@@ -434,31 +518,21 @@
                     if (data.title) {
                         titleEl.innerText = data.title;
                     }
-                    if (data.url) {
-                        urlEl.innerText = data.url;
-                    }
 
                     if (data.status === 'completed') {
-                        actionsEl.innerHTML = `
-                            <span class="status-badge completed">Listo</span>
+                        actionsContainer.innerHTML = `
                             <a href="/files/${encodeURIComponent(data.filename)}" class="btn-download" download="${data.filename}">
-                                ⬇ MP3
+                                Descargar MP3
                             </a>
                         `;
                     } else if (data.status === 'processing') {
-                        actionsEl.innerHTML = `
-                            <span class="status-badge processing"><span class="spinner"></span> Descargando</span>
-                        `;
+                        actionsContainer.innerHTML = `<span class="status-badge processing"><div class="spinner" style="display:inline-block; vertical-align:middle; width:12px; height:12px; margin-right:4px;"></div> Descargando</span>`;
                         setTimeout(checkStatus, 2000);
                     } else if (data.status === 'queued') {
-                        actionsEl.innerHTML = `
-                            <span class="status-badge queued">En espera</span>
-                        `;
+                        actionsContainer.innerHTML = `<span class="status-badge queued">En espera</span>`;
                         setTimeout(checkStatus, 2000);
                     } else if (data.status === 'failed') {
-                        actionsEl.innerHTML = `
-                            <span class="status-badge failed" title="${data.error || 'Error desconocido'}">Fallido</span>
-                        `;
+                        actionsContainer.innerHTML = `<span class="status-badge failed" title="${data.error || 'Error'}">Fallido</span>`;
                     }
                 } catch (e) {
                     setTimeout(checkStatus, 3000);
