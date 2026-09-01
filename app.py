@@ -41,6 +41,8 @@ DOWNLOAD_FOLDER = os.environ.get('DOWNLOAD_FOLDER', 'downloads')
 app.config['DOWNLOAD_FOLDER'] = os.path.abspath(DOWNLOAD_FOLDER)
 FILE_EXPIRY_SECONDS = int(os.environ.get('FILE_EXPIRY_SECONDS', 7200))  # Default: 2 hours
 
+IS_WEB_MODE = os.environ.get('WEB_MODE', 'false').lower() == 'true'
+
 # Ensure download folder exists
 os.makedirs(app.config['DOWNLOAD_FOLDER'], exist_ok=True)
 
@@ -146,7 +148,7 @@ def process_batch(items, job_ids):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', is_desktop=not IS_WEB_MODE)
 
 
 @app.route('/health')
@@ -213,6 +215,9 @@ def get_info():
 @app.route('/download', methods=['POST'])
 @limiter.limit("5 per minute")
 def start_download():
+    if IS_WEB_MODE:
+        return jsonify({'error': 'En la versión web las descargas están desactivadas por restricciones técnicas. Por favor, descarga la App de Escritorio.'}), 403
+
     # Logueamos la petición cruda para depurar el 400
     logger.info(f"Incoming /download request. Headers: {request.headers}")
     

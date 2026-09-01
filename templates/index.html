@@ -3,11 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="is-desktop" content="{{ 'true' if is_desktop else 'false' }}">
     <title>YouTube Playlist Downloader</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 400;
+            src: url('/static/fonts/Inter-Regular.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 500;
+            src: url('/static/fonts/Inter-Medium.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 600;
+            src: url('/static/fonts/Inter-SemiBold.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 700;
+            src: url('/static/fonts/Inter-Bold.woff2') format('woff2');
+        }
         :root {
             --bg: #ffffff;
             --fg: #000000;
@@ -440,12 +462,33 @@
             </div>
             <div id="status-list"></div>
         </div>
-        
+        {% if not is_desktop %}
+        <div id="desktop-app-section" style="display: none; text-align: center; margin-top: 2rem; padding: 2rem; background: #fafafa; border: 1px solid var(--border); border-radius: 8px;">
+            <h3 style="margin-top:0;">Descarga la App de Escritorio</h3>
+            <p style="color: var(--muted); font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.5;">
+                Para saltar las restricciones anti-bots de YouTube y descargar sin límites, procesa los archivos localmente con nuestra App gratuita.
+            </p>
+            <div class="flex-row" style="justify-content: center; flex-wrap: wrap; gap: 1rem;">
+                <button class="btn btn-primary" onclick="alert('La versión para Mac estará disponible muy pronto.')">
+                    🍎 Descargar para Mac
+                </button>
+                <button class="btn btn-secondary" onclick="alert('La versión para Windows estará disponible muy pronto.')">
+                    🪟 Descargar para Windows
+                </button>
+                <button class="btn btn-secondary" onclick="alert('La versión para Linux estará disponible muy pronto.')">
+                    🐧 Descargar para Linux
+                </button>
+            </div>
+        </div>
+        {% endif %}
+
         <div class="footer">
             <p>Diseñado para la velocidad. Impulsado por FFmpeg.</p>
+            {% if not is_desktop %}
             <div class="disclaimer">
                 <strong>⚠️ Advertencia:</strong> Este es un proyecto educativo de código abierto creado exclusivamente para mi portafolio profesional (konstantink.dev). Por favor, úsalo con precaución y respeta los derechos de autor al descargar contenido.
             </div>
+            {% endif %}
         </div>
     </div>
 
@@ -582,6 +625,15 @@
         startDownloadBtn.addEventListener('click', async () => {
             const checkboxes = document.querySelectorAll('.video-checkbox:checked');
             if (checkboxes.length === 0) return;
+
+            const isDesktop = document.querySelector('meta[name="is-desktop"]').content === 'true';
+            if (!isDesktop) {
+                selectionSection.style.display = 'none';
+                const desktopSection = document.getElementById('desktop-app-section');
+                desktopSection.style.display = 'block';
+                desktopSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                return;
+            }
 
             const selectedVideos = Array.from(checkboxes).map(c => loadedVideos[c.dataset.index]);
 
