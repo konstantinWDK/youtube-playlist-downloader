@@ -1,0 +1,59 @@
+name: Build Mac DMG
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --name "YouTubePlaylistDownloader" \
+                      --windowed \
+                      --add-data "templates:templates" \
+                      --add-data "static:static" \
+                      desktop.py
+
+      - name: Install create-dmg
+        run: brew install create-dmg
+
+      - name: Create DMG
+        run: |
+          create-dmg \
+            --volname "YouTubePlaylistDownloader" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --icon "YouTubePlaylistDownloader.app" 150 190 \
+            --hide-extension "YouTubePlaylistDownloader.app" \
+            --app-drop-link 450 185 \
+            "YouTubePlaylistDownloader.dmg" \
+            "dist/YouTubePlaylistDownloader.app"
+
+      - name: Create Release and Upload Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Release v1.0.${{ github.run_number }}
+          files: YouTubePlaylistDownloader.dmg
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
