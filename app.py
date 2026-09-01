@@ -98,6 +98,7 @@ def download_video(url, job_id):
         'noplaylist': True,
         'quiet': True,
         'no_warnings': True,
+        'extractor_args': {'youtube': {'client': ['android', 'mweb', 'ios']}},
     }
 
     try:
@@ -161,7 +162,12 @@ def get_info():
     logger.info(f"User requested info for URL: {url}")
     
     all_videos = []
-    ydl_opts = {'extract_flat': True, 'quiet': True, 'no_warnings': True}
+    ydl_opts = {
+        'extract_flat': True, 
+        'quiet': True, 
+        'no_warnings': True,
+        'extractor_args': {'youtube': {'client': ['android', 'mweb', 'ios']}}
+    }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         try:
