@@ -4,8 +4,11 @@ import threading
 import uuid
 import io
 import logging
+import re
 from logging.handlers import TimedRotatingFileHandler
 from flask import Flask, request, render_template, send_from_directory, jsonify, send_file
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from werkzeug.middleware.proxy_fix import ProxyFix
 import yt_dlp
 
@@ -23,6 +26,13 @@ logger.addHandler(handler)
 # ---------------------
 
 app = Flask(__name__)
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    storage_uri="memory://",
+    default_limits=["200 per day", "50 per hour"]
+)
 
 # Apply ProxyFix for reverse proxy support (Coolify, Traefik, Caddy, Nginx)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
@@ -134,11 +144,18 @@ def health():
 
 
 @app.route('/info', methods=['POST'])
+@limiter.limit("10 per minute")
 def get_info():
     payload = request.get_json(silent=True) or {}
     url = payload.get('url')
-    if not url:
+    
+    if not url or not isinstance(url, str):
         return jsonify({'error': 'No se proporcionó una URL.'}), 400
+        
+    # Anti-SSRF: Solo permitir dominios de YouTube
+    if not re.match(r'^https?://(www\.)?(youtube\.com|youtu\.be)/.*', url):
+        logger.warning(f"Rejected invalid URL attempt: {url}")
+        return jsonify({'error': 'URL inválida o no permitida. Solo YouTube.'}), 400
 
     logger.info(f"User requested info for URL: {url}")
     
@@ -171,11 +188,16 @@ def get_info():
 
 
 @app.route('/download', methods=['POST'])
+@limiter.limit("5 per minute")
 def start_download():
     payload = request.get_json(silent=True) or {}
     videos = payload.get('videos', [])
     if not videos or not isinstance(videos, list):
         return jsonify({'error': 'No se han proporcionado videos válidos.'}), 400
+
+    if len(videos) > 50:
+        logger.warning(f"User tried to download {len(videos)} videos (limit 50).")
+        return jsonify({'error': 'Por seguridad, el límite máximo es de 50 descargas simultáneas.'}), 400
 
     logger.info(f"User started download for {len(videos)} videos")
 

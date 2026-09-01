@@ -2,3 +2,4 @@ Flask>=3.0.0
 yt-dlp>=2024.8.6
 gunicorn>=22.0.0
 Werkzeug>=3.0.0
+Flask-Limiter>=3.0.0
