@@ -399,16 +399,16 @@
             </a>
         </div>
         <div class="header">
-            <span class="badge">Nuevo Motor V2.0</span>
-            <h1>Extracción de audio,<br>redefinida.</h1>
-            <p class="subtitle">La herramienta definitiva para transformar instantáneamente cualquier lista de reproducción de YouTube en archivos de audio de alta fidelidad.</p>
+            <span class="badge">YouTube a MP3</span>
+            <h1>Descargador de<br>Playlists.</h1>
+            <p class="subtitle">Herramienta rápida y sencilla para extraer y descargar cualquier lista de reproducción de YouTube en formato MP3.</p>
         </div>
 
         <div class="input-group">
-            <input type="text" id="url-input" placeholder="Pega el enlace de la revolución aquí...">
+            <input type="text" id="url-input" placeholder="Pega el enlace de la playlist aquí...">
             <div class="flex-row">
                 <button class="btn btn-primary" id="analyze-btn">
-                    <span>Descubrir la magia</span>
+                    <span>Analizar Playlist</span>
                 </button>
             </div>
         </div>
@@ -416,7 +416,7 @@
         <!-- Section 2: Selection -->
         <div id="selection-section">
             <div class="selection-header">
-                <h3>Selecciona tu experiencia</h3>
+                <h3>Seleccionar audios</h3>
                 <label class="checkbox-wrapper">
                     <input type="checkbox" id="select-all" checked>
                     <span>Seleccionar todo</span>
@@ -428,15 +428,15 @@
             </div>
 
             <div class="flex-row">
-                <button class="btn btn-secondary" id="cancel-btn">Descartar</button>
-                <button class="btn btn-primary" id="start-download-btn">Materializar audio</button>
+                <button class="btn btn-secondary" id="cancel-btn">Cancelar</button>
+                <button class="btn btn-primary" id="start-download-btn">Descargar MP3</button>
             </div>
         </div>
 
         <!-- Section 3: Status Tracking -->
         <div id="status-section">
             <div class="status-header">
-                <h3>Proceso de transformación</h3>
+                <h3>Estado de descarga</h3>
             </div>
             <div id="status-list"></div>
         </div>
@@ -520,7 +520,7 @@
             } finally {
                 clearInterval(messageInterval);
                 analyzeBtn.disabled = false;
-                analyzeBtn.innerHTML = '<span>Descubrir la magia</span>';
+                analyzeBtn.innerHTML = '<span>Analizar Playlist</span>';
             }
         });
 
