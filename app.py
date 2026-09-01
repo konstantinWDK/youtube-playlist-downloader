@@ -118,6 +118,7 @@ def download_video(url, job_id):
                     jobs[job_id]['filename'] = mp3_filename
                     jobs[job_id]['title'] = info.get('title', jobs[job_id].get('title', 'Audio'))
     except Exception as e:
+        logger.error(f"Error crítico en yt-dlp descargando {url}: {str(e)}")
         with jobs_lock:
             if job_id in jobs:
                 jobs[job_id]['status'] = 'failed'
@@ -190,9 +191,17 @@ def get_info():
 @app.route('/download', methods=['POST'])
 @limiter.limit("5 per minute")
 def start_download():
-    payload = request.get_json(silent=True) or {}
+    # Logueamos la petición cruda para depurar el 400
+    logger.info(f"Incoming /download request. Headers: {request.headers}")
+    
+    payload = request.get_json(silent=True)
+    if payload is None:
+        logger.error(f"Fallo al parsear JSON. Data cruda: {request.get_data(as_text=True)}")
+        payload = {}
+
     videos = payload.get('videos', [])
     if not videos or not isinstance(videos, list):
+        logger.error(f"Payload de videos inválido o vacío. Payload parseado: {payload}")
         return jsonify({'error': 'No se han proporcionado videos válidos.'}), 400
 
     if len(videos) > 50:
