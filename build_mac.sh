@@ -1,5 +1,13 @@
 #!/bin/bash
+set -e # Detener script si hay algún error
+
 echo "Preparando entorno para empaquetar en Mac..."
+
+# Activar el entorno virtual si existe, o crearlo
+if [ ! -d "venv" ]; then
+    python3 -m venv venv
+fi
+source venv/bin/activate
 
 # Instalar dependencias necesarias
 pip install -r requirements.txt
