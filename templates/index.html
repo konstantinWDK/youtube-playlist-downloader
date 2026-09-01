@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube MP3 Downloader</title>
+    <title>Audio Extraído. Sin Límites.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --danger: #ef4444;
+            --bg: #ffffff;
+            --fg: #000000;
+            --muted: #666666;
+            --border: #eaeaea;
+            --accent: #000000;
+            --accent-hover: #333333;
+            --success: #0070f3;
+            --danger: #e00;
         }
 
         * {
@@ -27,75 +26,93 @@
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--fg);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding: 40px 24px;
+            padding: 80px 24px;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
             width: 100%;
-            max-width: 700px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+            max-width: 600px;
+            animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fade-in-up {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .header {
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 48px;
         }
 
-        h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 8px;
-            letter-spacing: -0.02em;
-        }
-
-        p.subtitle {
-            color: var(--text-muted);
-            font-size: 1rem;
-            font-weight: 300;
-        }
-
-        .input-group {
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            background: #f5f5f5;
+            color: var(--muted);
+            border-radius: 9999px;
             margin-bottom: 24px;
         }
 
-        label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text-main);
-            margin-bottom: 8px;
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        p.subtitle {
+            color: var(--muted);
+            font-size: 1.125rem;
+            font-weight: 400;
+            line-height: 1.5;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .input-group {
+            margin-bottom: 32px;
+            position: relative;
         }
 
         input[type="text"] {
             width: 100%;
-            padding: 14px 16px;
+            padding: 16px 20px;
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 12px;
             font-family: inherit;
-            font-size: 1rem;
-            color: var(--text-main);
-            background: #f1f5f9;
-            transition: all 0.2s;
+            font-size: 1.05rem;
+            color: var(--fg);
+            background: var(--bg);
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
         }
 
         input[type="text"]:focus {
             outline: none;
-            border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px var(--accent);
+        }
+
+        input[type="text"]::placeholder {
+            color: #a0a0a0;
         }
 
         .btn {
@@ -103,76 +120,99 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 12px 24px;
+            padding: 16px 24px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-family: inherit;
             font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             width: 100%;
         }
 
         .btn-primary {
-            background: var(--primary);
+            background: var(--accent);
             color: white;
         }
 
         .btn-primary:hover:not(:disabled) {
-            background: var(--primary-hover);
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px 0 rgba(0,0,0,0.1);
         }
 
         .btn-secondary {
-            background: #f1f5f9;
-            color: var(--text-main);
+            background: #ffffff;
+            color: var(--fg);
             border: 1px solid var(--border);
         }
 
         .btn-secondary:hover:not(:disabled) {
-            background: #e2e8f0;
+            background: #fafafa;
+            border-color: #000;
         }
 
         .btn:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
         }
 
         /* Playlist Selection Styles */
         #selection-section {
             display: none;
-            margin-top: 24px;
+            margin-top: 32px;
             border-top: 1px solid var(--border);
-            padding-top: 24px;
+            padding-top: 32px;
+            animation: fade-in 0.4s ease forwards;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .selection-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 24px;
         }
 
         .selection-header h3 {
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--muted);
+            cursor: pointer;
         }
 
         .video-list {
             max-height: 400px;
             overflow-y: auto;
             border: 1px solid var(--border);
-            border-radius: 10px;
-            margin-bottom: 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
             background: #fafafa;
+            scrollbar-width: thin;
         }
 
         .video-item {
             display: flex;
             align-items: center;
-            padding: 12px 16px;
+            padding: 16px;
             border-bottom: 1px solid var(--border);
             transition: background 0.2s;
+            background: #ffffff;
         }
 
         .video-item:last-child {
@@ -180,14 +220,14 @@
         }
 
         .video-item:hover {
-            background: #f1f5f9;
+            background: #fafafa;
         }
 
         .video-item input[type="checkbox"] {
             margin-right: 16px;
             width: 18px;
             height: 18px;
-            accent-color: var(--primary);
+            accent-color: var(--accent);
             cursor: pointer;
         }
 
@@ -207,7 +247,8 @@
 
         .video-url {
             font-size: 0.8rem;
-            color: var(--text-muted);
+            color: var(--muted);
+            margin-top: 4px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -217,64 +258,77 @@
         #status-section {
             display: none;
             margin-top: 32px;
-            padding-top: 24px;
+            padding-top: 32px;
             border-top: 1px solid var(--border);
+            animation: fade-in 0.4s ease forwards;
         }
 
         .status-header h3 {
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+            margin-bottom: 24px;
         }
 
         .status-item {
-            background: #fff;
+            background: #ffffff;
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 14px 16px;
+            border-radius: 12px;
+            padding: 16px;
             margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            gap: 16px;
+            transition: all 0.2s;
+        }
+
+        .status-item:hover {
+            border-color: #000;
         }
 
         .status-badge {
             padding: 4px 10px;
-            border-radius: 20px;
+            border-radius: 6px;
             font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
+            font-weight: 500;
+            letter-spacing: 0.02em;
         }
 
-        .status-badge.queued { background: #f1f5f9; color: var(--text-muted); }
-        .status-badge.processing { background: #eff6ff; color: #3b82f6; }
-        .status-badge.completed { background: #ecfdf5; color: var(--success); }
-        .status-badge.failed { background: #fef2f2; color: var(--danger); }
+        .status-badge.queued { background: #f5f5f5; color: var(--muted); }
+        .status-badge.processing { background: #f0f7ff; color: var(--success); }
+        .status-badge.completed { background: #000; color: #fff; }
+        .status-badge.failed { background: #fff0f0; color: var(--danger); }
 
         .btn-download {
-            background: var(--success);
-            color: white;
+            background: #000;
+            color: #fff;
             text-decoration: none;
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 8px 16px;
+            border-radius: 8px;
             font-size: 0.85rem;
             font-weight: 500;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            display: inline-block;
         }
 
         .btn-download:hover {
-            background: #059669;
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         .spinner {
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(0, 0, 0, 0.1);
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-top-color: currentColor;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
+        }
+
+        .spinner.dark {
+            border-color: rgba(0,0,0,0.1);
+            border-top-color: #000;
         }
 
         @keyframes spin {
@@ -283,54 +337,102 @@
 
         .flex-row {
             display: flex;
-            gap: 12px;
-            margin-bottom: 12px;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .footer {
+            margin-top: 64px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+        .top-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .top-nav a {
+            color: var(--muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .top-nav a:hover {
+            color: var(--fg);
+        }
+
+        .top-nav svg {
+            width: 16px;
+            height: 16px;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="top-nav">
+            <a href="https://konstantink.dev" target="_blank">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                konstantink.dev
+            </a>
+            <a href="https://github.com/Konstantinwdk/youtube-playlist-downloader" target="_blank">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                GitHub
+            </a>
+        </div>
         <div class="header">
-            <h1>Playlist Downloader</h1>
-            <p class="subtitle">Descarga audio de YouTube en un diseño simple y minimalista</p>
+            <span class="badge">Nuevo Motor V2.0</span>
+            <h1>Extracción de audio,<br>redefinida.</h1>
+            <p class="subtitle">La herramienta definitiva para transformar instantáneamente cualquier lista de reproducción de YouTube en archivos de audio de alta fidelidad.</p>
         </div>
 
         <div class="input-group">
-            <label for="url-input">Enlace del video o lista de reproducción:</label>
+            <input type="text" id="url-input" placeholder="Pega el enlace de la revolución aquí...">
             <div class="flex-row">
-                <input type="text" id="url-input" placeholder="https://www.youtube.com/watch?v=...">
+                <button class="btn btn-primary" id="analyze-btn">
+                    <span>Descubrir la magia</span>
+                </button>
             </div>
-            <button class="btn btn-primary" id="analyze-btn">
-                <span>Analizar URL</span>
-            </button>
         </div>
 
         <!-- Section 2: Selection -->
         <div id="selection-section">
             <div class="selection-header">
-                <h3>Selecciona las canciones</h3>
-                <div>
+                <h3>Selecciona tu experiencia</h3>
+                <label class="checkbox-wrapper">
                     <input type="checkbox" id="select-all" checked>
-                    <label for="select-all" style="display:inline; margin-left:4px; cursor:pointer;">Seleccionar todo</label>
-                </div>
+                    <span>Seleccionar todo</span>
+                </label>
             </div>
             
             <div class="video-list" id="video-list">
                 <!-- Video items will be injected here -->
             </div>
 
-            <div class="flex-row" style="margin-bottom: 0;">
-                <button class="btn btn-secondary" id="cancel-btn">Cancelar</button>
-                <button class="btn btn-primary" id="start-download-btn">Descargar Seleccionadas</button>
+            <div class="flex-row">
+                <button class="btn btn-secondary" id="cancel-btn">Descartar</button>
+                <button class="btn btn-primary" id="start-download-btn">Materializar audio</button>
             </div>
         </div>
 
         <!-- Section 3: Status Tracking -->
         <div id="status-section">
             <div class="status-header">
-                <h3>Descargas en progreso</h3>
+                <h3>Proceso de transformación</h3>
             </div>
             <div id="status-list"></div>
+        </div>
+        
+        <div class="footer">
+            Diseñado para la velocidad. Impulsado por FFmpeg.
         </div>
     </div>
 
@@ -348,17 +450,36 @@
         const statusListEl = document.getElementById('status-list');
 
         let loadedVideos = [];
+        let messageInterval;
+        const loadingMessages = [
+            "Procesando señal...",
+            "Iniciando enlace cuántico con YouTube...",
+            "Analizando las ondas sonoras...",
+            "¡Vaya! Parece que hay bastantes canciones por aquí...",
+            "Desencriptando la matriz musical...",
+            "Casi lo tenemos, no desesperes...",
+            "Extrayendo la máxima calidad posible..."
+        ];
 
         // 1. Analyze URL
         analyzeBtn.addEventListener('click', async () => {
             const url = urlInput.value.trim();
             if (!url) {
-                alert("Introduce una URL válida");
+                urlInput.focus();
                 return;
             }
 
             analyzeBtn.disabled = true;
-            analyzeBtn.innerHTML = '<div class="spinner"></div> <span>Analizando...</span>';
+            let msgIndex = 0;
+            analyzeBtn.innerHTML = `<div class="spinner"></div> <span id="analyze-msg">${loadingMessages[0]}</span>`;
+            
+            clearInterval(messageInterval);
+            messageInterval = setInterval(() => {
+                msgIndex = (msgIndex + 1) % loadingMessages.length;
+                const msgEl = document.getElementById('analyze-msg');
+                if(msgEl) msgEl.innerText = loadingMessages[msgIndex];
+            }, 3000);
+
             selectionSection.style.display = 'none';
 
             try {
@@ -370,19 +491,23 @@
 
                 if (!response.ok) {
                     const data = await response.json();
-                    throw new Error(data.error || 'Error al analizar la URL');
+                    throw new Error(data.error || 'Fallo en la extracción de datos.');
                 }
 
                 const data = await response.json();
                 loadedVideos = data.videos;
                 renderVideoList(loadedVideos);
                 selectionSection.style.display = 'block';
+                
+                // Scroll to selection
+                selectionSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             } catch (err) {
                 alert(err.message);
             } finally {
+                clearInterval(messageInterval);
                 analyzeBtn.disabled = false;
-                analyzeBtn.innerHTML = '<span>Analizar URL</span>';
+                analyzeBtn.innerHTML = '<span>Descubrir la magia</span>';
             }
         });
 
@@ -443,15 +568,12 @@
         // 2. Start Download
         startDownloadBtn.addEventListener('click', async () => {
             const checkboxes = document.querySelectorAll('.video-checkbox:checked');
-            if (checkboxes.length === 0) {
-                alert('Selecciona al menos una canción.');
-                return;
-            }
+            if (checkboxes.length === 0) return;
 
             const selectedVideos = Array.from(checkboxes).map(c => loadedVideos[c.dataset.index]);
 
             startDownloadBtn.disabled = true;
-            startDownloadBtn.innerHTML = '<div class="spinner"></div> <span>Iniciando...</span>';
+            startDownloadBtn.innerHTML = '<div class="spinner"></div> <span>Iniciando motor...</span>';
 
             try {
                 const response = await fetch('/download', {
@@ -462,12 +584,11 @@
 
                 if (!response.ok) {
                     const data = await response.json();
-                    throw new Error(data.error || 'Error al iniciar descarga');
+                    throw new Error(data.error || 'Error al iniciar la matriz de descarga');
                 }
 
                 const { job_ids } = await response.json();
                 
-                // Hide selection, show status
                 selectionSection.style.display = 'none';
                 statusSection.style.display = 'block';
                 urlInput.value = '';
@@ -476,12 +597,14 @@
                     createStatusItem(id);
                     trackJob(id);
                 });
+                
+                statusSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             } catch (err) {
                 alert(err.message);
             } finally {
                 startDownloadBtn.disabled = false;
-                startDownloadBtn.innerText = 'Descargar Seleccionadas';
+                startDownloadBtn.innerText = 'Materializar audio';
             }
         });
 
@@ -492,11 +615,11 @@
             item.id = `job-${id}`;
             item.innerHTML = `
                 <div class="video-info">
-                    <div class="video-title">Procesando...</div>
-                    <div class="video-url">ID: ${id.substring(0, 8)}...</div>
+                    <div class="video-title">Inicializando secuencia...</div>
+                    <div class="video-url">TX-ID: ${id.substring(0, 12)}</div>
                 </div>
                 <div>
-                    <span class="status-badge queued">En cola</span>
+                    <span class="status-badge queued">EN ESPERA</span>
                 </div>
             `;
             statusListEl.prepend(item);
@@ -515,24 +638,24 @@
                     if (!response.ok) return;
 
                     const data = await response.json();
-                    if (data.title) {
+                    if (data.title && data.title !== 'Unknown Title') {
                         titleEl.innerText = data.title;
                     }
 
                     if (data.status === 'completed') {
                         actionsContainer.innerHTML = `
                             <a href="/files/${encodeURIComponent(data.filename)}" class="btn-download" download="${data.filename}">
-                                Descargar MP3
+                                Descargar Archivo
                             </a>
                         `;
                     } else if (data.status === 'processing') {
-                        actionsContainer.innerHTML = `<span class="status-badge processing"><div class="spinner" style="display:inline-block; vertical-align:middle; width:12px; height:12px; margin-right:4px;"></div> Descargando</span>`;
+                        actionsContainer.innerHTML = `<span class="status-badge processing"><div class="spinner dark" style="display:inline-block; vertical-align:middle; width:12px; height:12px; margin-right:6px;"></div> PROCESANDO</span>`;
                         setTimeout(checkStatus, 2000);
                     } else if (data.status === 'queued') {
-                        actionsContainer.innerHTML = `<span class="status-badge queued">En espera</span>`;
+                        actionsContainer.innerHTML = `<span class="status-badge queued">EN ESPERA</span>`;
                         setTimeout(checkStatus, 2000);
                     } else if (data.status === 'failed') {
-                        actionsContainer.innerHTML = `<span class="status-badge failed" title="${data.error || 'Error'}">Fallido</span>`;
+                        actionsContainer.innerHTML = `<span class="status-badge failed" title="${data.error || 'Error'}">ERROR DE SISTEMA</span>`;
                     }
                 } catch (e) {
                     setTimeout(checkStatus, 3000);
