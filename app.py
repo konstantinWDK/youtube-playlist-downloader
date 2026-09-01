@@ -44,6 +44,16 @@ FILE_EXPIRY_SECONDS = int(os.environ.get('FILE_EXPIRY_SECONDS', 7200))  # Defaul
 # Ensure download folder exists
 os.makedirs(app.config['DOWNLOAD_FOLDER'], exist_ok=True)
 
+COOKIE_FILE_PATH = '/tmp/yt_cookies.txt'
+if os.environ.get('YOUTUBE_COOKIES'):
+    try:
+        with open(COOKIE_FILE_PATH, 'w') as f:
+            # Reemplazar retornos literales por reales por si se introducen mal en Coolify
+            f.write(os.environ.get('YOUTUBE_COOKIES').replace('\\n', '\n'))
+        logger.info("YouTube cookies file created from environment variable.")
+    except Exception as e:
+        logger.error(f"Failed to write YouTube cookies: {e}")
+
 # Global status dictionary to track progress
 jobs = {}
 jobs_lock = threading.Lock()
@@ -100,6 +110,9 @@ def download_video(url, job_id):
         'no_warnings': True,
         'extractor_args': {'youtube': {'client': ['android', 'mweb', 'ios']}},
     }
+    
+    if os.path.exists(COOKIE_FILE_PATH):
+        ydl_opts['cookiefile'] = COOKIE_FILE_PATH
 
     try:
         with jobs_lock:
@@ -168,6 +181,9 @@ def get_info():
         'no_warnings': True,
         'extractor_args': {'youtube': {'client': ['android', 'mweb', 'ios']}}
     }
+    
+    if os.path.exists(COOKIE_FILE_PATH):
+        ydl_opts['cookiefile'] = COOKIE_FILE_PATH
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         try:
