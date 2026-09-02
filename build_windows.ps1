@@ -43,6 +43,7 @@ Write-Host "=======================================================" -Foreground
                    --windowed `
                    --onefile `
                    --icon "logo.ico" `
+                   --version-file "file_version_info.txt" `
                    --collect-all static_ffmpeg `
                    --add-data "templates;templates" `
                    --add-data "static;static" `
