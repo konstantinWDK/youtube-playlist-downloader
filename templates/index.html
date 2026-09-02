@@ -298,7 +298,7 @@
             </a>
         </div>
         <div class="header">
-            <span class="badge">v2.0.0</span>
+            <span class="badge" onclick="openFolder()" style="cursor: pointer;" title="Abrir carpeta de descargas">v2.0.6 • Abrir Descargas 📁</span>
             <h1>YouTube Playlist<br>Downloader.</h1>
             <p class="subtitle">Herramienta rápida y sencilla para extraer y descargar cualquier lista de reproducción de YouTube en formato MP3.</p>
         </div>
@@ -310,6 +310,12 @@
                     <span>Analizar Playlist</span>
                 </button>
             </div>
+        </div>
+
+        <div class="download-path-container" style="margin-bottom: 32px; font-size: 0.9rem; color: var(--muted); display: flex; align-items: center; gap: 8px;">
+            <span>📁 Guardar en:</span>
+            <span id="download-path-display" style="font-family: monospace; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 350px;">Cargando...</span>
+            <button id="change-folder-btn" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; cursor: pointer; transition: all 0.2s;">Cambiar</button>
         </div>
 
         <div id="error-message" class="error-block"></div>
@@ -569,9 +575,9 @@
 
                     if (data.status === 'completed') {
                         actionsContainer.innerHTML = `
-                            <a href="/files/${encodeURIComponent(data.filename)}" class="btn-download" download="${data.filename}">
-                                Descargar Archivo
-                            </a>
+                            <button class="btn-download" onclick="showFile('${encodeURIComponent(data.filename)}')">
+                                Mostrar en Finder
+                            </button>
                         `;
                     } else if (data.status === 'processing') {
                         actionsContainer.innerHTML = `<span class="status-badge processing"><div class="spinner dark" style="display:inline-block; vertical-align:middle; width:12px; height:12px; margin-right:6px;"></div> PROCESANDO</span>`;
@@ -589,6 +595,42 @@
 
             checkStatus();
         }
+
+        async function openFolder() {
+            try {
+                await fetch('/open-folder', { method: 'POST' });
+            } catch(e) { console.error(e); }
+        }
+
+        async function showFile(filename) {
+            try {
+                await fetch('/show-file', { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ filename: decodeURIComponent(filename) })
+                });
+            } catch(e) { console.error(e); }
+        }
+
+        async function loadDownloadFolder() {
+            try {
+                const res = await fetch('/config/download-folder');
+                const data = await res.json();
+                document.getElementById('download-path-display').innerText = data.folder;
+            } catch(e) { console.error(e); }
+        }
+
+        document.getElementById('change-folder-btn').addEventListener('click', async () => {
+            try {
+                const res = await fetch('/config/change-folder', { method: 'POST' });
+                const data = await res.json();
+                if(data.folder) {
+                    document.getElementById('download-path-display').innerText = data.folder;
+                }
+            } catch(e) { console.error(e); }
+        });
+
+        loadDownloadFolder();
     </script>
 </body>
 </html>

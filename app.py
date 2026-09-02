@@ -14,7 +14,31 @@ import yt_dlp
 
 import sys
 
-LOG_DIR = os.path.abspath('logs')
+import sys
+import os
+import glob
+
+# Añadir rutas de Homebrew al PATH (respaldo)
+os.environ["PATH"] += os.pathsep + os.pathsep.join([
+    '/opt/homebrew/bin',
+    '/opt/homebrew/sbin',
+    '/usr/local/bin',
+    '/usr/bin'
+])
+
+if getattr(sys, 'frozen', False):
+    LOG_DIR = os.path.join(os.path.expanduser("~"), 'Library', 'Logs', 'YouTubePlaylistDownloader')
+    # Añadir el ffmpeg empaquetado al PATH evitando el bug de static_ffmpeg (lockfile) en Mac
+    ffmpeg_bin = glob.glob(os.path.join(sys._MEIPASS, 'static_ffmpeg', 'bin', 'darwin_*'))
+    if ffmpeg_bin:
+        os.environ["PATH"] = ffmpeg_bin[0] + os.pathsep + os.environ["PATH"]
+else:
+    LOG_DIR = os.path.abspath('logs')
+    try:
+        from static_ffmpeg import add_paths
+        add_paths()
+    except ImportError:
+        pass
 os.makedirs(LOG_DIR, exist_ok=True)
 log_file = os.path.join(LOG_DIR, 'downloads.log')
 handler = TimedRotatingFileHandler(log_file, when="midnight", interval=1, backupCount=30)
@@ -26,7 +50,12 @@ logger.setLevel(logging.INFO)
 logger.addHandler(handler)
 # ---------------------
 
-app = Flask(__name__)
+if getattr(sys, 'frozen', False):
+    template_folder = os.path.join(sys._MEIPASS, 'templates')
+    static_folder = os.path.join(sys._MEIPASS, 'static')
+    app = Flask(__name__, template_folder=template_folder, static_folder=static_folder)
+else:
+    app = Flask(__name__)
 
 limiter = Limiter(
     get_remote_address,
@@ -118,6 +147,7 @@ def download_video(url, job_id):
         'noplaylist': True,
         'quiet': True,
         'no_warnings': True,
+        'nocheckcertificate': True,
         'extractor_args': {'youtube': {'client': ['android', 'mweb', 'ios']}},
     }
     
@@ -190,6 +220,7 @@ def get_info():
         'extract_flat': True, 
         'quiet': True, 
         'no_warnings': True,
+        'nocheckcertificate': True,
         'extractor_args': {'youtube': {'client': ['android', 'mweb', 'ios']}}
     }
     
@@ -274,6 +305,48 @@ def get_status(job_id):
     if not job:
         return jsonify({'error': 'Tarea no encontrada'}), 404
     return jsonify(job)
+
+
+
+
+@app.route('/config/download-folder', methods=['GET'])
+def get_download_folder():
+    return jsonify({'folder': app.config['DOWNLOAD_FOLDER']})
+
+@app.route('/config/change-folder', methods=['POST'])
+def change_folder():
+    try:
+        import webview
+        if len(webview.windows) > 0:
+            window = webview.windows[0]
+            result = window.create_file_dialog(webview.FOLDER_DIALOG)
+            if result and len(result) > 0:
+                app.config['DOWNLOAD_FOLDER'] = result[0]
+    except Exception as e:
+        print(e)
+    return jsonify({'folder': app.config['DOWNLOAD_FOLDER']})
+
+@app.route('/open-folder', methods=['POST'])
+def open_folder():
+    import subprocess
+    folder = app.config['DOWNLOAD_FOLDER']
+    os.makedirs(folder, exist_ok=True)
+    if sys.platform == 'darwin':
+        subprocess.run(['open', folder])
+    return jsonify({'status': 'ok'})
+
+@app.route('/show-file', methods=['POST'])
+def show_file():
+    data = request.json
+    filename = data.get('filename')
+    if not filename:
+        return jsonify({'error': 'No filename'}), 400
+        
+    filepath = os.path.join(app.config['DOWNLOAD_FOLDER'], filename)
+    import subprocess
+    if sys.platform == 'darwin' and os.path.exists(filepath):
+        subprocess.run(['open', '-R', filepath])
+    return jsonify({'status': 'ok'})
 
 
 @app.route('/files/<path:filename>')

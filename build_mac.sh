@@ -21,6 +21,9 @@ rm -rf build dist
 # --add-data incluye las carpetas estáticas y templates de Flask
 pyinstaller --name "YouTubePlaylistDownloader" \
             --windowed \
+            --icon "logo.icns" \
+            --osx-bundle-identifier "com.konstantink.youtube-playlist-downloader" \
+            --collect-all static_ffmpeg \
             --add-data "templates:templates" \
             --add-data "static:static" \
             desktop.py
@@ -40,6 +43,7 @@ if command -v create-dmg &> /dev/null; then
 
     create-dmg \
       --volname "YouTubePlaylistDownloader" \
+      --volicon "logo.icns" \
       --window-pos 200 120 \
       --window-size 600 400 \
       --icon-size 100 \
