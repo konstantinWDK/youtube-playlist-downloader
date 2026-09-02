@@ -513,7 +513,8 @@
         </div>
         
         <!-- Section: Download Desktop App -->
-        <div id="desktop-app-section" style="display: none; text-align: left; margin-top: 2.5rem; padding: 2.5rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
+        {% if not is_desktop %}
+        <div id="desktop-app-section" style="text-align: left; margin-top: 2.5rem; padding: 2.5rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
             <h3 style="margin-top:0; font-size: 1.4rem; margin-bottom: 0.5rem;">Descarga el Motor de Escritorio</h3>
             <p style="color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.6;">
                 Por motivos de seguridad (restricciones de YouTube hacia servidores en la nube) las descargas deben procesarse de forma local utilizando tu propia red. Selecciona tu sistema operativo para descargar la app gratuita.
@@ -533,6 +534,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
 
         <div class="footer">
             <p>Diseñado para la velocidad. Impulsado por FFmpeg.</p>
