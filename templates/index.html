@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Descarga listas de reproducción enteras de YouTube en MP3 rápido y sin límites. Herramienta SaaS gratuita y open-source para extraer audio.">
+    <meta name="keywords" content="youtube playlist downloader, descargar lista youtube, youtube a mp3 masivo, descargar musica youtube, saas">
+    <meta name="author" content="KonstantinWDK">
     <meta name="is-desktop" content="{{ 'true' if is_desktop else 'false' }}">
     <title>YouTube Playlist Downloader</title>
     <style>
@@ -200,13 +203,57 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 1rem;
         }
 
         .selection-header h3 {
             font-size: 1.25rem;
             font-weight: 600;
             letter-spacing: -0.02em;
+        }
+
+        .os-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            width: 100%;
+            border: 1px solid transparent;
+        }
+        
+        .mac-btn {
+            background-color: var(--primary);
+            color: white;
+        }
+        .mac-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        .disabled-btn {
+            background-color: var(--bg-hover);
+            color: var(--muted);
+            border-color: var(--border);
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .error-block {
+            background-color: #fff1f0;
+            border: 1px solid #ffccc7;
+            color: #cf1322;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+            text-align: left;
+            font-size: 0.95rem;
         }
 
         .checkbox-wrapper {
@@ -435,6 +482,8 @@
             </div>
         </div>
 
+        <div id="error-message" class="error-block"></div>
+
         <!-- Section 2: Selection -->
         <div id="selection-section">
             <div class="selection-header">
@@ -462,33 +511,34 @@
             </div>
             <div id="status-list"></div>
         </div>
-        {% if not is_desktop %}
-        <div id="desktop-app-section" style="display: none; text-align: center; margin-top: 2rem; padding: 2rem; background: #fafafa; border: 1px solid var(--border); border-radius: 8px;">
-            <h3 style="margin-top:0;">Descarga la App de Escritorio</h3>
-            <p style="color: var(--muted); font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.5;">
-                Para saltar las restricciones anti-bots de YouTube y descargar sin límites, procesa los archivos localmente con nuestra App gratuita.
+        
+        <!-- Section: Download Desktop App -->
+        <div id="desktop-app-section" style="display: none; text-align: left; margin-top: 2.5rem; padding: 2.5rem; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.04);">
+            <h3 style="margin-top:0; font-size: 1.4rem; margin-bottom: 0.5rem;">Descarga el Motor de Escritorio</h3>
+            <p style="color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.6;">
+                Por motivos de seguridad (restricciones de YouTube hacia servidores en la nube) las descargas deben procesarse de forma local utilizando tu propia red. Selecciona tu sistema operativo para descargar la app gratuita.
             </p>
-            <div class="flex-row" style="justify-content: center; flex-wrap: wrap; gap: 1rem;">
-                <button class="btn btn-primary" onclick="window.open('https://github.com/konstantinWDK/youtube-playlist-downloader/releases/latest', '_blank')">
-                    🍎 Descargar para Mac
-                </button>
-                <button class="btn btn-secondary" onclick="alert('La versión para Windows estará disponible muy pronto.')">
-                    🪟 Descargar para Windows
-                </button>
-                <button class="btn btn-secondary" onclick="alert('La versión para Linux estará disponible muy pronto.')">
-                    🐧 Descargar para Linux
-                </button>
+            <div class="flex-row" style="flex-direction: column; gap: 1rem;">
+                <a href="https://github.com/konstantinWDK/youtube-playlist-downloader/releases/latest" target="_blank" class="os-btn mac-btn">
+                    <svg viewBox="0 0 384 512" fill="currentColor" width="20" height="20"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 24 184.8 8 277.3c-1.9 11.2-1.9 23-1.9 35.8 0 83.1 34.5 130.4 69 130.4 22 0 32.8-14 70.8-14 37.5 0 47.9 14 70.8 14 36.5 0 69-47.3 69-130.4-25.5-12.7-36.9-38-36.9-66.2zM237.1 92.2c19.1-25 35.5-56.4 35.5-92.2-28.5 1.4-60.9 16.9-80.4 41.3-17.8 22-35.5 54.9-35.5 89.2 30.5 1.9 59.5-13.6 80.4-38.3z"/></svg>
+                    <span>Descargar para Mac</span>
+                </a>
+                <div class="os-btn disabled-btn">
+                    <svg viewBox="0 0 448 512" fill="currentColor" width="20" height="20"><path d="M0 93.7l183.6-25.3v177.4H0V93.7zm0 324.6l183.6 25.3V268.4H0v149.9zm203.8 28L448 480V268.4H203.8v177.9zm0-380.6v180.1H448V32L203.8 65.7z"/></svg>
+                    <span>Windows (Próximamente)</span>
+                </div>
+                <div class="os-btn disabled-btn">
+                    <svg viewBox="0 0 448 512" fill="currentColor" width="20" height="20"><path d="M220.8 123.3c1.9-25.4-8.7-45.7-27.1-57.2-12-7.5-26.7-10.7-42.5-9.3-13.4 1.2-27.3 7-38.6 16.4-2.2 1.8-4.3 3.9-6.3 6.1l-14.8-11.8c3.2-3.8 6.7-7.4 10.5-10.7 14.8-12.5 32.7-19.8 49.9-21.4 20.3-1.8 39.7 2.4 55.4 12.3 24 15.2 38.3 42.6 35.7 75.7-1.1 14.5-5.9 28.1-13.6 40-7.8 12-18.7 22.3-31.5 29.5-13.8 7.8-29.2 11.5-44.5 10.1-13.4-1.2-27.2-7.1-38.6-16.5-2.2-1.8-4.3-3.8-6.3-6.1l-14.7-11.8c3.2 3.8 6.6 7.3 10.4 10.6 14.8 12.5 32.7 19.8 49.9 21.4 20.3 1.8 39.7-2.4 55.4-12.3 16.9-10.7 31.6-25.4 41.7-42.7 9.8-16.5 14.9-34.9 14.7-54.3zm204.6 123.6v.1c0 55.1-23.7 101.4-64 127.3-39 25.1-87.1 31.5-135 18-47.9-13.6-90.1-43.2-118-83.3-27.9-40.1-41.5-91.8-38-144.3 3.5-52.4 24-102.5 58.1-140.7 33.7-37.9 78.4-61.9 125.7-67.7 47.4-5.7 95 6 133.5 33.1 39.3 27.6 67.2 73 77.7 127.5zM224 48c-85 0-154 69.1-154 154s69 154 154 154 154-69.1 154-154S309 48 224 48z"/></svg>
+                    <span>Linux (Próximamente)</span>
+                </div>
             </div>
         </div>
-        {% endif %}
 
         <div class="footer">
             <p>Diseñado para la velocidad. Impulsado por FFmpeg.</p>
-            {% if not is_desktop %}
             <div class="disclaimer">
                 <strong>⚠️ Advertencia:</strong> Este es un proyecto educativo de código abierto creado exclusivamente para mi portafolio profesional (konstantink.dev). Por favor, úsalo con precaución y respeta los derechos de autor al descargar contenido.
             </div>
-            {% endif %}
         </div>
     </div>
 
@@ -524,6 +574,9 @@
                 urlInput.focus();
                 return;
             }
+            
+            const errorBlock = document.getElementById('error-message');
+            errorBlock.style.display = 'none';
 
             analyzeBtn.disabled = true;
             let msgIndex = 0;
@@ -559,7 +612,9 @@
                 selectionSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             } catch (err) {
-                alert(err.message);
+                const errorBlock = document.getElementById('error-message');
+                errorBlock.innerHTML = `<strong>Error de Sistema:</strong> ${err.message}<br><small style="margin-top:0.5rem; display:block;">Nota: Si la lista de YouTube te da error, suele ser porque YouTube detecta que este servidor web es un bot y bloquea la IP. Descarga la App de Mac a continuación para usar tu IP local de casa.</small>`;
+                errorBlock.style.display = 'block';
             } finally {
                 clearInterval(messageInterval);
                 analyzeBtn.disabled = false;
