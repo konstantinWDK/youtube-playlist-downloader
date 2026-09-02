@@ -12,8 +12,13 @@ from flask_limiter.util import get_remote_address
 from werkzeug.middleware.proxy_fix import ProxyFix
 import yt_dlp
 
+import sys
+
 # --- LOGGING SETUP ---
-LOG_DIR = os.path.abspath('logs')
+if getattr(sys, 'frozen', False):
+    LOG_DIR = os.path.join(os.path.expanduser("~"), 'Library', 'Logs', 'YouTubePlaylistDownloader')
+else:
+    LOG_DIR = os.path.abspath('logs')
 os.makedirs(LOG_DIR, exist_ok=True)
 log_file = os.path.join(LOG_DIR, 'downloads.log')
 handler = TimedRotatingFileHandler(log_file, when="midnight", interval=1, backupCount=30)
@@ -25,7 +30,12 @@ logger.setLevel(logging.INFO)
 logger.addHandler(handler)
 # ---------------------
 
-app = Flask(__name__)
+if getattr(sys, 'frozen', False):
+    template_folder = os.path.join(sys._MEIPASS, 'templates')
+    static_folder = os.path.join(sys._MEIPASS, 'static')
+    app = Flask(__name__, template_folder=template_folder, static_folder=static_folder)
+else:
+    app = Flask(__name__)
 
 limiter = Limiter(
     get_remote_address,
@@ -42,6 +52,15 @@ app.config['DOWNLOAD_FOLDER'] = os.path.abspath(DOWNLOAD_FOLDER)
 FILE_EXPIRY_SECONDS = int(os.environ.get('FILE_EXPIRY_SECONDS', 7200))  # Default: 2 hours
 
 IS_WEB_MODE = os.environ.get('WEB_MODE', 'true').lower() == 'true'
+
+from werkzeug.exceptions import HTTPException
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    if isinstance(e, HTTPException):
+        return jsonify(error=str(e.description)), e.code
+    logger.exception("Unhandled exception:")
+    return jsonify(error="Error interno del servidor."), 500
 
 # Ensure download folder exists
 os.makedirs(app.config['DOWNLOAD_FOLDER'], exist_ok=True)

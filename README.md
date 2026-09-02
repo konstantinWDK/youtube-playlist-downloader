@@ -93,6 +93,24 @@ Accede a **`http://localhost:5006`** en tu navegador.
 
 ---
 
+### Opción 3: Aplicación de Escritorio Nativa (Mac)
+
+Si deseas usar la aplicación localmente en tu Mac sin necesidad de abrir la terminal cada vez, puedes empaquetarla como una aplicación nativa (`.app` y `.dmg`) utilizando el script incluido.
+
+#### Pasos para compilar:
+
+```bash
+# 1. Instalar la herramienta para generar DMGs
+brew install create-dmg
+
+# 2. Ejecutar el script de construcción
+bash build_mac.sh
+```
+
+El script se encargará de instalar las dependencias necesarias y empaquetar la aplicación. Al finalizar, encontrarás el archivo `YouTubePlaylistDownloader.dmg` en la carpeta `dist/`, listo para ser instalado arrastrándolo a tu carpeta de Aplicaciones.
+
+---
+
 ## ⚙️ Configuración y Variables de Entorno
 
 Puedes personalizar la configuración creando un archivo `.env` a partir del ejemplo:

@@ -9,30 +9,12 @@
     <meta name="is-desktop" content="{{ 'true' if is_desktop else 'false' }}">
     <title>YouTube Playlist Downloader</title>
     <style>
-        @font-face {
-            font-family: 'Inter';
-            font-style: normal;
-            font-weight: 400;
-            src: url('/static/fonts/Inter-Regular.woff2') format('woff2');
-        }
-        @font-face {
-            font-family: 'Inter';
-            font-style: normal;
-            font-weight: 500;
-            src: url('/static/fonts/Inter-Medium.woff2') format('woff2');
-        }
-        @font-face {
-            font-family: 'Inter';
-            font-style: normal;
-            font-weight: 600;
-            src: url('/static/fonts/Inter-SemiBold.woff2') format('woff2');
-        }
-        @font-face {
-            font-family: 'Inter';
-            font-style: normal;
-            font-weight: 700;
-            src: url('/static/fonts/Inter-Bold.woff2') format('woff2');
-        }
+        /* ... fuentes omitidas por brevedad, asumo que mantengo las de antes ... */
+        @font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; src: url('/static/fonts/Inter-Regular.woff2') format('woff2'); }
+        @font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; src: url('/static/fonts/Inter-Medium.woff2') format('woff2'); }
+        @font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; src: url('/static/fonts/Inter-SemiBold.woff2') format('woff2'); }
+        @font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; src: url('/static/fonts/Inter-Bold.woff2') format('woff2'); }
+        
         :root {
             --bg: #ffffff;
             --fg: #000000;
@@ -44,11 +26,22 @@
             --danger: #e00;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        /* Variables para el modo Desktop (Estilo macOS Oscuro) */
+        body.desktop-mode {
+            --bg: #1e1e1e;
+            --fg: #ffffff;
+            --muted: #a1a1aa;
+            --border: #3f3f46;
+            --accent: #0A84FF; /* Azul de macOS */
+            --accent-hover: #007AFF;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at top right, rgba(10, 132, 255, 0.15), transparent 40%),
+                              radial-gradient(circle at bottom left, rgba(94, 92, 230, 0.1), transparent 40%);
+            padding-top: 40px;
         }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -60,6 +53,7 @@
             align-items: flex-start;
             padding: 80px 24px;
             -webkit-font-smoothing: antialiased;
+            transition: all 0.3s ease;
         }
 
         .container {
@@ -69,18 +63,16 @@
             opacity: 0;
             transform: translateY(20px);
         }
+        
+        body.desktop-mode .container {
+            max-width: 700px;
+        }
 
         @keyframes fade-in-up {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
+        .header { text-align: center; margin-bottom: 48px; }
 
         .badge {
             display: inline-block;
@@ -90,9 +82,14 @@
             letter-spacing: 0.05em;
             text-transform: uppercase;
             background: #f5f5f5;
-            color: var(--muted);
+            color: #666;
             border-radius: 9999px;
             margin-bottom: 24px;
+        }
+        
+        body.desktop-mode .badge {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ccc;
         }
 
         h1 {
@@ -129,15 +126,17 @@
             transition: all 0.2s ease;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
         }
+        
+        body.desktop-mode input[type="text"] {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
+        }
 
         input[type="text"]:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 1px var(--accent);
-        }
-
-        input[type="text"]::placeholder {
-            color: #a0a0a0;
+            box-shadow: 0 0 0 2px rgba(10, 132, 255, 0.3);
         }
 
         .btn {
@@ -160,11 +159,16 @@
             background: var(--accent);
             color: white;
         }
+        
+        body.desktop-mode .btn-primary {
+            background: linear-gradient(180deg, #2f95ff 0%, #0A84FF 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
 
         .btn-primary:hover:not(:disabled) {
             background: var(--accent-hover);
             transform: translateY(-1px);
-            box-shadow: 0 4px 14px 0 rgba(0,0,0,0.1);
         }
 
         .btn-secondary {
@@ -172,21 +176,16 @@
             color: var(--fg);
             border: 1px solid var(--border);
         }
-
-        .btn-secondary:hover:not(:disabled) {
-            background: #fafafa;
-            border-color: #000;
+        
+        body.desktop-mode .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-            box-shadow: none !important;
-        }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* Playlist Selection Styles */
-        #selection-section {
+        #selection-section, #status-section {
             display: none;
             margin-top: 32px;
             border-top: 1px solid var(--border);
@@ -194,76 +193,14 @@
             animation: fade-in 0.4s ease forwards;
         }
 
-        @keyframes fade-in {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+        .selection-header, .status-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;
         }
 
-        .selection-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .selection-header h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-        }
-
-        .os-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            flex: 1;
-            min-width: 220px;
-            border: 1px solid transparent;
-        }
-        
-        .mac-btn {
-            background-color: var(--accent);
-            color: white;
-        }
-        .mac-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-        
-        .disabled-btn {
-            background-color: var(--bg-hover);
-            color: var(--muted);
-            border-color: var(--border);
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-
-        .error-block {
-            background-color: #fff1f0;
-            border: 1px solid #ffccc7;
-            color: #cf1322;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
-            display: none;
-            text-align: left;
-            font-size: 0.95rem;
-        }
-
-        .checkbox-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            color: var(--muted);
-            cursor: pointer;
+        .selection-header h3, .status-header h3 {
+            font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em;
         }
 
         .video-list {
@@ -273,190 +210,74 @@
             border-radius: 12px;
             margin-bottom: 24px;
             background: #fafafa;
-            scrollbar-width: thin;
+        }
+        
+        body.desktop-mode .video-list {
+            background: var(--card-bg);
+            border-color: var(--border);
         }
 
         .video-item {
-            display: flex;
-            align-items: center;
-            padding: 16px;
+            display: flex; align-items: center; padding: 16px;
             border-bottom: 1px solid var(--border);
-            transition: background 0.2s;
             background: #ffffff;
         }
-
-        .video-item:last-child {
-            border-bottom: none;
+        
+        body.desktop-mode .video-item {
+            background: transparent;
         }
 
-        .video-item:hover {
-            background: #fafafa;
-        }
+        .video-item:hover { background: #fafafa; }
+        body.desktop-mode .video-item:hover { background: rgba(255, 255, 255, 0.05); }
 
-        .video-item input[type="checkbox"] {
-            margin-right: 16px;
-            width: 18px;
-            height: 18px;
-            accent-color: var(--accent);
-            cursor: pointer;
-        }
-
-        .video-info {
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .video-title {
-            font-size: 0.95rem;
-            font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            cursor: pointer;
-        }
-
-        .video-url {
-            font-size: 0.8rem;
-            color: var(--muted);
-            margin-top: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* Status Section Styles */
-        #status-section {
-            display: none;
-            margin-top: 32px;
-            padding-top: 32px;
-            border-top: 1px solid var(--border);
-            animation: fade-in 0.4s ease forwards;
-        }
-
-        .status-header h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            margin-bottom: 24px;
-        }
+        .video-title { font-size: 0.95rem; font-weight: 500; }
+        .video-url { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
 
         .status-item {
             background: #ffffff;
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            transition: all 0.2s;
+            padding: 16px; margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center;
         }
-
-        .status-item:hover {
-            border-color: #000;
+        
+        body.desktop-mode .status-item {
+            background: var(--card-bg);
         }
 
         .status-badge {
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 0.02em;
+            padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 500;
         }
 
         .status-badge.queued { background: #f5f5f5; color: var(--muted); }
         .status-badge.processing { background: #f0f7ff; color: var(--success); }
         .status-badge.completed { background: #000; color: #fff; }
         .status-badge.failed { background: #fff0f0; color: var(--danger); }
+        
+        body.desktop-mode .status-badge.queued { background: rgba(255,255,255,0.1); color: #ccc; }
+        body.desktop-mode .status-badge.completed { background: var(--success); color: #fff; }
 
         .btn-download {
-            background: #000;
-            color: #fff;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            display: inline-block;
+            background: #000; color: #fff; text-decoration: none; padding: 8px 16px; border-radius: 8px; font-size: 0.85rem;
         }
+        body.desktop-mode .btn-download { background: var(--success); }
 
-        .btn-download:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
+        .flex-row { display: flex; gap: 16px; margin-top: 16px; }
 
-        .spinner {
-            width: 18px;
-            height: 18px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top-color: currentColor;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
+        .footer { margin-top: 64px; text-align: center; font-size: 0.85rem; color: var(--muted); }
+        
+        body.desktop-mode .footer { display: none; } /* Ocultar footer en escritorio */
 
-        .spinner.dark {
-            border-color: rgba(0,0,0,0.1);
-            border-top-color: #000;
-        }
+        .top-nav { display: flex; justify-content: center; gap: 24px; margin-bottom: 40px; font-size: 0.85rem; }
+        body.desktop-mode .top-nav { display: none; } /* Ocultar nav web en escritorio */
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .flex-row {
-            display: flex;
-            gap: 16px;
-            margin-top: 16px;
-        }
-
-        .footer {
-            margin-top: 64px;
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--muted);
-        }
-        .disclaimer {
-            margin-top: 16px;
-            padding: 12px;
-            background: #fafafa;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--muted);
-            font-size: 0.75rem;
-            line-height: 1.4;
-        }
-        .top-nav {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 24px;
-            margin-bottom: 40px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .top-nav a {
-            color: var(--muted);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: color 0.2s;
-        }
-
-        .top-nav a:hover {
-            color: var(--fg);
-        }
-
-        .top-nav svg {
-            width: 16px;
-            height: 16px;
-        }
+        .top-nav a { color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: 6px; }
+        
+        .spinner { width: 18px; height: 18px; border: 2px solid rgba(255, 255, 255, 0.3); border-top-color: currentColor; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
-<body>
+<body class="{{ 'desktop-mode' if is_desktop else 'web-mode' }}">
     <div class="container">
         <div class="top-nav">
             <a href="https://konstantink.dev" target="_blank">
@@ -616,7 +437,9 @@
 
             } catch (err) {
                 const errorBlock = document.getElementById('error-message');
-                errorBlock.innerHTML = `<strong>Error de Sistema:</strong> ${err.message}<br><small style="margin-top:0.5rem; display:block;">Nota: Si la lista de YouTube te da error, suele ser porque YouTube detecta que este servidor web es un bot y bloquea la IP. Descarga la App de Mac a continuación para usar tu IP local de casa.</small>`;
+                const isDesktop = document.querySelector('meta[name="is-desktop"]').content === 'true';
+                let noteHTML = isDesktop ? '' : '<br><small style="margin-top:0.5rem; display:block;">Nota: Si la lista de YouTube te da error, suele ser porque YouTube detecta que este servidor web es un bot y bloquea la IP. Descarga la App de Mac a continuación para usar tu IP local de casa.</small>';
+                errorBlock.innerHTML = `<strong>Error:</strong> ${err.message}${noteHTML}`;
                 errorBlock.style.display = 'block';
             } finally {
                 clearInterval(messageInterval);
