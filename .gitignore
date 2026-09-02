@@ -45,3 +45,7 @@ Thumbs.db
 *.log
 package-lock.json
 
+# PyInstaller
+build/
+dist/
+*.spec
