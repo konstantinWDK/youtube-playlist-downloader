@@ -298,10 +298,37 @@
             </a>
         </div>
         <div class="header">
+            {% if not web_mode %}
             <span class="badge" onclick="openFolder()" style="cursor: pointer;" title="Abrir carpeta de descargas">v2.0.6 • Abrir Descargas 📁</span>
+            {% else %}
+            <span class="badge">v2.0.6</span>
+            {% endif %}
             <h1>YouTube Playlist<br>Downloader.</h1>
             <p class="subtitle">Herramienta rápida y sencilla para extraer y descargar cualquier lista de reproducción de YouTube en formato MP3.</p>
         </div>
+
+        {% if web_mode %}
+        <div class="landing-page" style="text-align: center; margin-top: 40px; animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;">
+            <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 16px; padding: 40px 32px; max-width: 500px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                <span class="badge" style="background: rgba(255,255,255,0.1); color: #ccc; margin-bottom: 24px;">Exclusivo para macOS</span>
+                <h2 style="margin-bottom: 32px; font-size: 1.8rem; letter-spacing: -0.02em;">Descarga la App Nativa</h2>
+                
+                <a href="/download-app/mac" class="btn btn-primary" style="text-decoration: none; display: inline-flex; width: 100%; padding: 18px 32px; font-size: 1.1rem; justify-content: center; gap: 12px; background: linear-gradient(180deg, #32d74b 0%, #28cd41 100%); color: white; border-color: rgba(255,255,255,0.1);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Descargar para Mac (.dmg)
+                </a>
+                
+                <div style="margin-top: 40px; text-align: left; font-size: 0.95rem; color: var(--muted);">
+                    <h4 style="color: var(--fg); margin-bottom: 16px; font-size: 1rem;">Instrucciones de instalación:</h4>
+                    <ol style="padding-left: 20px; line-height: 1.8;">
+                        <li>Descarga y abre el archivo <strong>.dmg</strong>.</li>
+                        <li>Arrastra la aplicación a tu carpeta de <strong>Aplicaciones</strong>.</li>
+                        <li>Abre la app y descarga toda la música que quieras, 100% gratis y sin límites.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        {% else %}
 
         <div class="input-group">
             <input type="text" id="url-input" placeholder="Pega el enlace de la playlist aquí...">
@@ -347,6 +374,9 @@
             </div>
             <div id="status-list"></div>
         </div>
+        
+        </div>
+        {% endif %}
         
         <!-- Section: Download Desktop App -->
 

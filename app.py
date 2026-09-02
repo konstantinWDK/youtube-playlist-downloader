@@ -18,6 +18,9 @@ import sys
 import os
 import glob
 
+# Modo de funcionamiento de la aplicación (True = pública/landing, False = escritorio local)
+WEB_MODE = os.environ.get('WEB_MODE', 'true').lower() == 'true'
+
 # Añadir rutas de Homebrew al PATH (respaldo)
 os.environ["PATH"] += os.pathsep + os.pathsep.join([
     '/opt/homebrew/bin',
@@ -186,7 +189,7 @@ def process_batch(items, job_ids):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', web_mode=WEB_MODE)
 
 
 @app.route('/health')
@@ -202,6 +205,9 @@ def health():
 @app.route('/info', methods=['POST'])
 @limiter.limit("10 per minute")
 def get_info():
+    if WEB_MODE:
+        return jsonify({'error': 'La API de descarga está deshabilitada en la versión pública web.'}), 403
+
     payload = request.get_json(silent=True) or {}
     url = payload.get('url')
     
@@ -255,6 +261,9 @@ def get_info():
 @app.route('/download', methods=['POST'])
 @limiter.limit("5 per minute")
 def start_download():
+    if WEB_MODE:
+        return jsonify({'error': 'La API de descarga está deshabilitada en la versión pública web.'}), 403
+        
     # Logueamos la petición cruda para depurar el 400
     logger.info(f"Incoming /download request. Headers: {request.headers}")
     
@@ -325,6 +334,10 @@ def change_folder():
     except Exception as e:
         print(e)
     return jsonify({'folder': app.config['DOWNLOAD_FOLDER']})
+
+@app.route('/download-app/mac', methods=['GET'])
+def download_mac_app():
+    return send_from_directory(os.path.join(app.root_path, 'releases'), 'YouTubePlaylistDownloader.dmg', as_attachment=True)
 
 @app.route('/open-folder', methods=['POST'])
 def open_folder():
