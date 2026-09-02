@@ -13,26 +13,31 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 import yt_dlp
 
 import sys
-
-import sys
-import os
 import glob
 
 # Modo de funcionamiento de la aplicación (True = pública/landing, False = escritorio local)
 WEB_MODE = os.environ.get('WEB_MODE', 'true').lower() == 'true'
 
-# Añadir rutas de Homebrew al PATH (respaldo)
-os.environ["PATH"] += os.pathsep + os.pathsep.join([
-    '/opt/homebrew/bin',
-    '/opt/homebrew/sbin',
-    '/usr/local/bin',
-    '/usr/bin'
-])
+# Añadir rutas de Homebrew al PATH (respaldo en macOS)
+if sys.platform == 'darwin':
+    os.environ["PATH"] += os.pathsep + os.pathsep.join([
+        '/opt/homebrew/bin',
+        '/opt/homebrew/sbin',
+        '/usr/local/bin',
+        '/usr/bin'
+    ])
 
 if getattr(sys, 'frozen', False):
-    LOG_DIR = os.path.join(os.path.expanduser("~"), 'Library', 'Logs', 'YouTubePlaylistDownloader')
-    # Añadir el ffmpeg empaquetado al PATH evitando el bug de static_ffmpeg (lockfile) en Mac
-    ffmpeg_bin = glob.glob(os.path.join(sys._MEIPASS, 'static_ffmpeg', 'bin', 'darwin_*'))
+    if sys.platform == 'darwin':
+        LOG_DIR = os.path.join(os.path.expanduser("~"), 'Library', 'Logs', 'YouTubePlaylistDownloader')
+        ffmpeg_bin = glob.glob(os.path.join(sys._MEIPASS, 'static_ffmpeg', 'bin', 'darwin_*'))
+    elif sys.platform == 'win32':
+        LOG_DIR = os.path.join(os.environ.get('LOCALAPPDATA', os.path.expanduser("~")), 'YouTubePlaylistDownloader', 'Logs')
+        ffmpeg_bin = glob.glob(os.path.join(sys._MEIPASS, 'static_ffmpeg', 'bin', 'win32*')) or glob.glob(os.path.join(sys._MEIPASS, 'static_ffmpeg', 'bin', '*'))
+    else:
+        LOG_DIR = os.path.join(os.path.expanduser("~"), '.local', 'share', 'YouTubePlaylistDownloader', 'logs')
+        ffmpeg_bin = glob.glob(os.path.join(sys._MEIPASS, 'static_ffmpeg', 'bin', 'linux*'))
+
     if ffmpeg_bin:
         os.environ["PATH"] = ffmpeg_bin[0] + os.pathsep + os.environ["PATH"]
 else:
@@ -339,6 +344,10 @@ def change_folder():
 def download_mac_app():
     return send_from_directory(os.path.join(app.root_path, 'releases'), 'YouTubePlaylistDownloader.dmg', as_attachment=True)
 
+@app.route('/download-app/windows', methods=['GET'])
+def download_windows_app():
+    return send_from_directory(os.path.join(app.root_path, 'releases'), 'YouTubePlaylistDownloader.exe', as_attachment=True)
+
 @app.route('/open-folder', methods=['POST'])
 def open_folder():
     import subprocess
@@ -346,6 +355,10 @@ def open_folder():
     os.makedirs(folder, exist_ok=True)
     if sys.platform == 'darwin':
         subprocess.run(['open', folder])
+    elif sys.platform == 'win32':
+        os.startfile(folder)
+    else:
+        subprocess.run(['xdg-open', folder])
     return jsonify({'status': 'ok'})
 
 @app.route('/show-file', methods=['POST'])
@@ -359,6 +372,10 @@ def show_file():
     import subprocess
     if sys.platform == 'darwin' and os.path.exists(filepath):
         subprocess.run(['open', '-R', filepath])
+    elif sys.platform == 'win32' and os.path.exists(filepath):
+        subprocess.run(['explorer', f'/select,{os.path.normpath(filepath)}'])
+    elif os.path.exists(filepath):
+        subprocess.run(['xdg-open', os.path.dirname(filepath)])
     return jsonify({'status': 'ok'})
 
 

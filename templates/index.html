@@ -325,23 +325,49 @@
                 <img src="/static/screenshot.png" alt="Preview de YouTube Playlist Downloader" style="width: 100%; max-width: 800px; display: block; margin: 0 auto; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;">
             </div>
 
-            <div style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 16px; padding: 40px 32px; max-width: 500px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; z-index: 1;">
-                <h2 style="margin-bottom: 32px; font-size: 1.8rem; letter-spacing: -0.02em;">Descargar para</h2>
+            <div class="download-section" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 16px; padding: 40px 32px; max-width: 580px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; z-index: 1;">
+                <h2 style="margin-bottom: 24px; font-size: 1.8rem; letter-spacing: -0.02em;">Descargar aplicación</h2>
                 
-                <a href="/download-app/mac" class="btn btn-primary" style="text-decoration: none; display: inline-flex; width: auto; padding: 12px 24px; font-size: 1rem; justify-content: center; gap: 8px; border-radius: 8px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    Descargar para Mac (.dmg)
-                </a>
+                <div class="download-buttons-grid" style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px;">
+                    <a href="/download-app/windows" class="btn-os-download btn-windows" style="flex: 1 1 220px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 20px; border-radius: 10px; background: linear-gradient(180deg, #0078D7 0%, #005A9E 100%); color: #fff; text-decoration: none; font-weight: 600; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,120,215,0.35); transition: all 0.2s ease;">
+                        <svg width="18" height="18" viewBox="0 0 88 88" fill="currentColor"><path d="M0 12.402l35.688-4.86.016 34.423-35.67.243zm35.67 33.528l.029 34.508-35.67-4.891-.029-29.86zm4.326-39.098L87.971 0v41.526l-47.975.31zm47.975 48.971L39.996 88l-.014-34.12 47.989.17z"/></svg>
+                        Descargar para Windows (.exe)
+                    </a>
+                    
+                    <a href="/download-app/mac" class="btn-os-download btn-mac" style="flex: 1 1 220px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 14px 20px; border-radius: 10px; background: linear-gradient(180deg, #2c2c2e 0%, #1c1c1e 100%); color: #fff; text-decoration: none; font-weight: 600; font-size: 0.95rem; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: all 0.2s ease;">
+                        <svg width="18" height="18" viewBox="0 0 170 170" fill="currentColor"><path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.04-7.67-7.81-11.96-14.3-5.75-8.69-10.23-18.79-13.44-30.3-3.21-11.51-4.82-22.36-4.82-32.55 0-15.35 3.75-27.46 11.26-36.33 7.51-8.87 16.94-13.37 28.3-13.5 4.89 0 10.33 1.25 16.32 3.75 5.99 2.5 9.7 3.8 11.13 3.9 1.83-.2 5.86-1.63 12.09-4.3 6.23-2.67 11.66-3.83 16.29-3.5 12.02.76 21.6 5.09 28.74 13-10.55 6.42-15.72 15.24-15.52 26.47.2 8.79 3.58 16.09 10.15 21.9 6.57 5.81 14.38 9.33 23.43 10.56-2.29 6.96-4.99 14.1-8.1 21.43zm-30.82-108.64c0 7.07-2.64 13.78-7.92 20.14-5.28 6.36-11.75 10.25-19.4 11.67-.53-1.07-.8-2.22-.8-3.46 0-7.07 2.87-14.07 8.6-21 5.73-6.93 12.23-10.73 19.52-11.4v4.05z"/></svg>
+                        Descargar para Mac (.dmg)
+                    </a>
+                </div>
                 
-                <div style="margin-top: 40px; text-align: left; font-size: 0.95rem; color: var(--muted);">
-                    <h4 style="color: var(--fg); margin-bottom: 16px; font-size: 1rem;">Instrucciones de instalación:</h4>
-                    <ol style="padding-left: 20px; line-height: 1.8; margin-bottom: 32px;">
-                        <li>Descarga y abre el archivo <strong>.dmg</strong>.</li>
-                        <li>Arrastra la aplicación a tu carpeta de <strong>Aplicaciones</strong>.</li>
-                        <li>Abre la app y descarga toda la música que quieras, 100% gratis y sin límites.</li>
-                    </ol>
+                <!-- Instructions Tabs -->
+                <div style="border-top: 1px solid var(--border); padding-top: 24px; text-align: left;">
+                    <div style="display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
+                        <button id="tab-btn-win" class="tab-btn active" onclick="switchTab('win')" style="background: rgba(255,255,255,0.1); border: none; color: #fff; font-weight: 600; font-size: 0.9rem; cursor: pointer; padding: 6px 14px; border-radius: 6px; transition: all 0.2s;">
+                            🪟 Windows
+                        </button>
+                        <button id="tab-btn-mac" class="tab-btn" onclick="switchTab('mac')" style="background: none; border: none; color: var(--muted); font-weight: 500; font-size: 0.9rem; cursor: pointer; padding: 6px 14px; border-radius: 6px; transition: all 0.2s;">
+                            🍎 macOS
+                        </button>
+                    </div>
 
-                    <div style="background: rgba(255, 165, 0, 0.1); border-left: 3px solid orange; padding: 12px; font-size: 0.85rem; border-radius: 4px;">
+                    <div id="tab-content-win" style="display: block; font-size: 0.92rem; color: var(--muted); line-height: 1.7;">
+                        <ol style="padding-left: 20px; margin-bottom: 24px;">
+                            <li>Descarga el archivo <strong>YouTubePlaylistDownloader.exe</strong>.</li>
+                            <li>Haz doble clic para abrir la app. <em>(Si Windows SmartScreen muestra un aviso de editor no verificado, haz clic en <strong>Más información</strong> y luego en <strong>Ejecutar de todas formas</strong>)</em>.</li>
+                            <li>¡Listo! Configura tu carpeta de destino y descarga tus playlists en MP3.</li>
+                        </ol>
+                    </div>
+
+                    <div id="tab-content-mac" style="display: none; font-size: 0.92rem; color: var(--muted); line-height: 1.7;">
+                        <ol style="padding-left: 20px; margin-bottom: 24px;">
+                            <li>Descarga y abre el archivo <strong>YouTubePlaylistDownloader.dmg</strong>.</li>
+                            <li>Arrastra la aplicación a tu carpeta de <strong>Aplicaciones</strong>.</li>
+                            <li>Abre la app desde Launchpad o Finder y descarga toda la música que quieras sin límites.</li>
+                        </ol>
+                    </div>
+
+                    <div style="background: rgba(255, 165, 0, 0.1); border-left: 3px solid orange; padding: 12px; font-size: 0.85rem; border-radius: 4px; color: var(--fg);">
                         <strong>⚠️ Proyecto Educativo:</strong> Este es un proyecto de código abierto creado exclusivamente como prueba técnica para mi portafolio profesional (konstantink.dev). Úsalo bajo tu propia responsabilidad.
                     </div>
                 </div>
@@ -625,7 +651,7 @@
                     if (data.status === 'completed') {
                         actionsContainer.innerHTML = `
                             <button class="btn-download" onclick="showFile('${encodeURIComponent(data.filename)}')">
-                                Mostrar en Finder
+                                Mostrar en carpeta 📁
                             </button>
                         `;
                     } else if (data.status === 'processing') {
@@ -664,22 +690,68 @@
         async function loadDownloadFolder() {
             try {
                 const res = await fetch('/config/download-folder');
-                const data = await res.json();
-                document.getElementById('download-path-display').innerText = data.folder;
+                if (res.ok) {
+                    const data = await res.json();
+                    const el = document.getElementById('download-path-display');
+                    if (el) el.innerText = data.folder;
+                }
             } catch(e) { console.error(e); }
         }
 
-        document.getElementById('change-folder-btn').addEventListener('click', async () => {
-            try {
-                const res = await fetch('/config/change-folder', { method: 'POST' });
-                const data = await res.json();
-                if(data.folder) {
-                    document.getElementById('download-path-display').innerText = data.folder;
-                }
-            } catch(e) { console.error(e); }
-        });
+        const changeFolderBtn = document.getElementById('change-folder-btn');
+        if (changeFolderBtn) {
+            changeFolderBtn.addEventListener('click', async () => {
+                try {
+                    const res = await fetch('/config/change-folder', { method: 'POST' });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if(data.folder) {
+                            document.getElementById('download-path-display').innerText = data.folder;
+                        }
+                    }
+                } catch(e) { console.error(e); }
+            });
+        }
 
         loadDownloadFolder();
+
+        // Control de pestañas de instalación Windows / Mac
+        function switchTab(os) {
+            const winBtn = document.getElementById('tab-btn-win');
+            const macBtn = document.getElementById('tab-btn-mac');
+            const winContent = document.getElementById('tab-content-win');
+            const macContent = document.getElementById('tab-content-mac');
+
+            if (!winBtn || !macBtn || !winContent || !macContent) return;
+
+            if (os === 'win') {
+                winBtn.classList.add('active');
+                winBtn.style.color = '#fff';
+                winBtn.style.background = 'rgba(255, 255, 255, 0.1)';
+                macBtn.classList.remove('active');
+                macBtn.style.color = 'var(--muted)';
+                macBtn.style.background = 'none';
+                winContent.style.display = 'block';
+                macContent.style.display = 'none';
+            } else {
+                macBtn.classList.add('active');
+                macBtn.style.color = '#fff';
+                macBtn.style.background = 'rgba(255, 255, 255, 0.1)';
+                winBtn.classList.remove('active');
+                winBtn.style.color = 'var(--muted)';
+                winBtn.style.background = 'none';
+                macContent.style.display = 'block';
+                winContent.style.display = 'none';
+            }
+        }
+
+        // Auto-detección del sistema operativo del usuario
+        (function initOsTab() {
+            try {
+                const isMac = /Mac|iPod|iPhone|iPad/i.test(navigator.platform || navigator.userAgent);
+                switchTab(isMac ? 'mac' : 'win');
+            } catch(e) {}
+        })();
     </script>
 </body>
 </html>

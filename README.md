@@ -15,21 +15,26 @@ Una aplicación nativa para macOS, rápida y ligera construida con **Flask**, **
 
 ---
 
-## 🍎 Instalación en macOS (Recomendado)
+## 💻 Instalación y Descargas
 
 La forma más sencilla de utilizar la aplicación en tu día a día:
 
-1. Ve a la carpeta `releases/` de este repositorio o accede a la web de descarga.
-2. Descarga el archivo **`YouTubePlaylistDownloader.dmg`**.
-3. Abre el archivo y arrastra la aplicación a tu carpeta de **Aplicaciones**.
-4. ¡Abre la app y empieza a descargar!
+### 🪟 Windows
+1. Descarga el archivo ejecutable **`YouTubePlaylistDownloader.exe`** desde `releases/` o la web.
+2. Ejecuta el archivo `.exe` con doble clic. *(Si Windows SmartScreen muestra un aviso preventivo por ser una app open-source, haz clic en **Más información** y luego en **Ejecutar de todas formas**)*.
+3. ¡Listo! Ya puedes configurar tu carpeta y descargar música.
+
+### 🍎 macOS
+1. Descarga el archivo instalador **`YouTubePlaylistDownloader.dmg`** desde `releases/` o la web.
+2. Abre el archivo `.dmg` y arrastra la aplicación a tu carpeta de **Aplicaciones**.
+3. ¡Abre la app y empieza a descargar!
 
 ---
 
 ## 🌐 Despliegue Web (Landing Page)
 
 La aplicación incluye un modo web (`WEB_MODE=True`) diseñado para ser desplegado en servicios como **Coolify** o servidores VPS. 
-Al desplegarse en web, **las descargas directas se desactivan por seguridad**. La interfaz web se transforma en una *Landing Page* promocional que permite a los visitantes descargar el archivo `.dmg` de tu aplicación.
+Al desplegarse en web, **las descargas directas se desactivan por seguridad**. La interfaz web se transforma en una *Landing Page* promocional que permite a los visitantes descargar el instalador para **Windows (.exe)** o **macOS (.dmg)**.
 
 ### Despliegue rápido con Docker
 ```bash
@@ -43,25 +48,25 @@ Abre `http://localhost:5006` para ver la Landing Page.
 
 ---
 
-## 🛠️ Desarrollo: Compilar la App de Mac
+## 🛠️ Desarrollo y Compilación
 
-Si deseas modificar el código y recompilar la aplicación nativa para macOS:
+### 🪟 Compilar en Windows (.exe)
+Puedes compilar con cualquiera de los scripts incluidos:
+- **Doble clic o Batch**: `build_windows.bat`
+- **PowerShell**: `.\build_windows.ps1`
 
+El ejecutable resultante se empaquetará automáticamente y se copiará a `dist/` y a `releases/YouTubePlaylistDownloader.exe`.
+
+### 🍎 Compilar en macOS (.dmg / .app)
 1. Instala las dependencias del sistema:
    ```bash
    brew install create-dmg
    ```
-2. Crea el entorno virtual e instala los paquetes:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
-   ```
-3. Ejecuta el script de construcción:
+2. Ejecuta el script de construcción:
    ```bash
    bash build_mac.sh
    ```
-4. Encontrarás el nuevo `.dmg` en la carpeta `dist/`.
+3. Encontrarás el nuevo `.dmg` en la carpeta `dist/` y `releases/`.
 
 ---
 
