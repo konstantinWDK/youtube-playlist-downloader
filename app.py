@@ -171,6 +171,7 @@ def index():
 
 
 @app.route('/health')
+@limiter.exempt
 def health():
     return jsonify({
         'status': 'healthy',
