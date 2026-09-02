@@ -41,7 +41,7 @@ DOWNLOAD_FOLDER = os.environ.get('DOWNLOAD_FOLDER', 'downloads')
 app.config['DOWNLOAD_FOLDER'] = os.path.abspath(DOWNLOAD_FOLDER)
 FILE_EXPIRY_SECONDS = int(os.environ.get('FILE_EXPIRY_SECONDS', 7200))  # Default: 2 hours
 
-IS_WEB_MODE = os.environ.get('WEB_MODE', 'false').lower() == 'true'
+IS_WEB_MODE = os.environ.get('WEB_MODE', 'true').lower() == 'true'
 
 # Ensure download folder exists
 os.makedirs(app.config['DOWNLOAD_FOLDER'], exist_ok=True)
