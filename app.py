@@ -14,11 +14,7 @@ import yt_dlp
 
 import sys
 
-# --- LOGGING SETUP ---
-if getattr(sys, 'frozen', False):
-    LOG_DIR = os.path.join(os.path.expanduser("~"), 'Library', 'Logs', 'YouTubePlaylistDownloader')
-else:
-    LOG_DIR = os.path.abspath('logs')
+LOG_DIR = os.path.abspath('logs')
 os.makedirs(LOG_DIR, exist_ok=True)
 log_file = os.path.join(LOG_DIR, 'downloads.log')
 handler = TimedRotatingFileHandler(log_file, when="midnight", interval=1, backupCount=30)
@@ -30,12 +26,7 @@ logger.setLevel(logging.INFO)
 logger.addHandler(handler)
 # ---------------------
 
-if getattr(sys, 'frozen', False):
-    template_folder = os.path.join(sys._MEIPASS, 'templates')
-    static_folder = os.path.join(sys._MEIPASS, 'static')
-    app = Flask(__name__, template_folder=template_folder, static_folder=static_folder)
-else:
-    app = Flask(__name__)
+app = Flask(__name__)
 
 limiter = Limiter(
     get_remote_address,
@@ -50,8 +41,6 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 DOWNLOAD_FOLDER = os.environ.get('DOWNLOAD_FOLDER', 'downloads')
 app.config['DOWNLOAD_FOLDER'] = os.path.abspath(DOWNLOAD_FOLDER)
 FILE_EXPIRY_SECONDS = int(os.environ.get('FILE_EXPIRY_SECONDS', 7200))  # Default: 2 hours
-
-IS_WEB_MODE = os.environ.get('WEB_MODE', 'true').lower() == 'true'
 
 from werkzeug.exceptions import HTTPException
 
@@ -167,7 +156,7 @@ def process_batch(items, job_ids):
 
 @app.route('/')
 def index():
-    return render_template('index.html', is_desktop=not IS_WEB_MODE)
+    return render_template('index.html')
 
 
 @app.route('/health')
@@ -235,9 +224,6 @@ def get_info():
 @app.route('/download', methods=['POST'])
 @limiter.limit("5 per minute")
 def start_download():
-    if IS_WEB_MODE:
-        return jsonify({'error': 'En la versión web las descargas están desactivadas por restricciones técnicas. Por favor, descarga la App de Escritorio.'}), 403
-
     # Logueamos la petición cruda para depurar el 400
     logger.info(f"Incoming /download request. Headers: {request.headers}")
     
