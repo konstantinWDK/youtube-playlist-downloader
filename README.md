@@ -1,5 +1,7 @@
 # 🎵 YouTube MP3 Downloader
 
+![Screenshot de la aplicación](assets/screenshot.png)
+
 Una aplicación web moderna, rápida y ligera construida con **Flask**, **yt-dlp** y **FFmpeg** para descargar y convertir videos y listas de reproducción de YouTube a audio **MP3 (192 kbps)** de alta calidad.
 
 Diseñada tanto para uso personal local como para despliegues en servidores domésticos, VPS o plataformas PaaS como **Coolify**.
@@ -96,6 +98,7 @@ Accede a **`http://localhost:5006`** en tu navegador.
 ### Opción 3: Aplicación de Escritorio Nativa (Mac)
 
 Si deseas usar la aplicación localmente en tu Mac sin necesidad de abrir la terminal cada vez, puedes empaquetarla como una aplicación nativa (`.app` y `.dmg`) utilizando el script incluido.
+La aplicación de Mac es **100% independiente**: incluye su propia versión de FFmpeg integrada y permite seleccionar la carpeta de descarga directamente desde la interfaz, sin requerir Homebrew ni dependencias en tu sistema.
 
 #### Pasos para compilar:
 
